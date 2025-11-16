@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Mute-at-Office (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Mute-at-Office (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
