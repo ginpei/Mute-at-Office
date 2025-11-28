@@ -8,12 +8,86 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
+    <Page.Resources>
+        <Style TargetType="ToggleSwitch">
+            <Setter Property="MinWidth" Value="80"/>
+        </Style>
+    </Page.Resources>
+
+    <StackPanel Spacing="26" Margin="20,30">
         <TextBlock
-            Text="Dashboard" 
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center" 
-            FontSize="24"
+            Text="Mute at Office"
+            FontSize="28"
+            FontWeight="SemiBold"
             />
-    </Grid>
+        <StackPanel Spacing="8">
+            <Grid Margin="17,0">
+                <TextBlock Text="Actions" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <Button HorizontalAlignment="Right">
+                    <Button.Content>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <SymbolIcon Symbol="Add" Grid.Column="0" Margin="0,0,8,0"/>
+                            <TextBlock Text="Add" Grid.Column="1" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </Grid>
+            <StackPanel
+                Background="{ThemeResource ControlFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="4"
+                Spacing="12"
+                >
+                <Grid Padding="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Padding="0"
+                            HorizontalContentAlignment="Left"
+                            VerticalAlignment="Stretch"
+                            IsTabStop="True"
+                            AutomationProperties.Name="Open Revert rule details">
+                        <TextBlock TextWrapping="Wrap">
+                            <Run FontWeight="Bold">Revert</Run>
+                            <LineBreak/>
+                            when
+                            <Run FontWeight="Bold">WiFi SSID</Run>
+                            is
+                            <Run FontWeight="Bold">12398u9dhiuxx-ssaw</Run>
+                            <LineBreak/>
+                            and
+                            <Run FontWeight="Bold">Speaker</Run>
+                            is
+                            <Run FontWeight="Bold">Realtek(R) Audio</Run>
+                        </TextBlock>
+                    </Button>
+
+                    <ToggleSwitch VerticalAlignment="Top" Grid.Column="1"/>
+                </Grid>
+
+                <Border BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"/>
+                <Grid Padding="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock TextWrapping="Wrap">
+                        <Run FontWeight="Bold">Mute</Run>
+                        otherwise
+                    </TextBlock>
+                    <ToggleSwitch VerticalAlignment="Top" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
 </Page>
