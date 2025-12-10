@@ -104,6 +104,8 @@ namespace Mute_at_Office.Libs.Wifi
                     Ssid = "";
                 }
             }
+
+            System.Diagnostics.Debug.WriteLine($"WifiStore: {WifiState} {Ssid}");
         }
     }
 }

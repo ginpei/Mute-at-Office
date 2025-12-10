@@ -65,7 +65,7 @@ namespace Mute_at_Office.Libs.Audio
                 Name = device.FriendlyName;
                 Volume = (uint)(device.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
                 IsMuted = device.AudioEndpointVolume.Mute;
-                Debug.WriteLine($"UpdateValuesByDevice {Name} {Volume} {(IsMuted ? "(muted)" : "")}");
+                Debug.WriteLine($"AudioStore: UpdateValuesByDevice {Name} {Volume} {(IsMuted ? "(muted)" : "")}");
             });
         }
 
