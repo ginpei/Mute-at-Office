@@ -27,6 +27,8 @@ public sealed partial class SettingsPage : Page
     public SettingsPage()
     {
         InitializeComponent();
+        SsidTextBox.Text = UserConfigFile.Instance.Current.Ssid ?? string.Empty;
+        SpeakerNameTextBox.Text = UserConfigFile.Instance.Current.SpeakerName ?? string.Empty;
     }
 
     private async void OnLoadClicked(object? sender, RoutedEventArgs e)

@@ -48,12 +48,12 @@
                             when
                             <Run FontWeight="Bold">WiFi SSID</Run>
                             is
-                            <Run FontWeight="Bold">12398u9dhiuxx-ssaw</Run>
+                            <Run x:Name="SsidRun" FontWeight="Bold">...</Run>
                             <LineBreak/>
                             and
                             <Run FontWeight="Bold">Speaker</Run>
                             is
-                            <Run FontWeight="Bold">Realtek(R) Audio</Run>
+                            <Run x:Name="SpeakerRun" FontWeight="Bold">...</Run>
                         </TextBlock>
 
                         <FontIcon Grid.Column="1" FontFamily="Segoe MDL2 Assets" FontSize="16" Glyph="&#xE76C;" HorizontalAlignment="Right"/>
