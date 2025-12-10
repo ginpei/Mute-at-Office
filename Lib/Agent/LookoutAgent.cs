@@ -20,7 +20,7 @@ namespace Mute_at_Office.Lib.Agent
             wifiStore.PropertyChanged += WifiStore_PropertyChanged;
         }
 
-        private void WifiStore_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void WifiStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (sender is Wifi.WifiStore s)
             {
