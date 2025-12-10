@@ -21,6 +21,30 @@
             FontWeight="SemiBold"
             />
         <StackPanel Spacing="8">
+            <TextBlock Text="Status" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            <StackPanel
+                Background="{ThemeResource ControlFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="4"
+                >
+                <Grid Padding="12" RowSpacing="8" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0">SSID</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="1" x:Name="SsidText">...</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0">Speaker</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="1" x:Name="SpeakerText">...</TextBlock>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Spacing="8">
             <TextBlock Text="Actions" FontWeight="SemiBold" VerticalAlignment="Center"/>
             <StackPanel
                 Background="{ThemeResource ControlFillColorDefaultBrush}"

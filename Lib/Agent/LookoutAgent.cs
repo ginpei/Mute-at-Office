@@ -10,12 +10,16 @@ namespace Mute_at_Office.Lib.Agent
 {
     class LookoutAgent
     {
+        private static readonly Lazy<LookoutAgent> instance = new(() => new LookoutAgent());
+
+        public static LookoutAgent Instance => instance.Value;
+
         private readonly string ssid = "";
 
-        private readonly Audio.AudioStore audioStore = new();
-        private readonly Wifi.WifiStore wifiStore = new();
+        public readonly Audio.AudioStore audioStore = new();
+        public readonly Wifi.WifiStore wifiStore = new();
 
-        public LookoutAgent()
+        private LookoutAgent()
         {
             wifiStore.PropertyChanged += WifiStore_PropertyChanged;
         }

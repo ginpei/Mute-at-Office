@@ -1,6 +1,6 @@
 using Microsoft.UI.Xaml.Controls;
+using Mute_at_Office.Lib.Agent;
 using Mute_at_Office.Libs.UserConfig;
-using Microsoft.UI.Xaml;
 using System;
 
 namespace Mute_at_Office.Pages.Dashboard
@@ -10,6 +10,15 @@ namespace Mute_at_Office.Pages.Dashboard
         public DashboardPage()
         {
             InitializeComponent();
+
+            if (LookoutAgent.Instance != null)
+            {
+                RenderSsid(LookoutAgent.Instance.wifiStore.Ssid);
+                LookoutAgent.Instance.wifiStore.PropertyChanged += WifiStore_PropertyChanged;
+
+                RenderSpeaker(LookoutAgent.Instance.audioStore.Name);
+                LookoutAgent.Instance.audioStore.PropertyChanged += AudioStore_PropertyChanged;
+            }
 
             var cfg = UserConfigFile.Instance.Current;
             if (!string.IsNullOrEmpty(cfg.Ssid))
@@ -27,6 +36,46 @@ namespace Mute_at_Office.Pages.Dashboard
                     speakerRun.Text = cfg.SpeakerName;
                 }
             }
+        }
+
+        private void WifiStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (sender is not Lib.Wifi.WifiStore s)
+            {
+                return;
+            }
+
+            RenderSsid(s.Ssid);
+        }
+
+        private void AudioStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (sender is not Lib.Audio.AudioStore s)
+            {
+                return;
+            }
+
+            RenderSpeaker(s.Name);
+        }
+
+        private void RenderSsid(string ssid)
+        {
+            if (this.FindName("SsidText") is not TextBlock ssidText)
+            {
+                return;
+            }
+
+            ssidText.Text = string.IsNullOrEmpty(ssid) ? "(No WiFi)" : ssid;
+        }
+
+        private void RenderSpeaker(string name)
+        {
+            if (this.FindName("SpeakerText") is not TextBlock speakerText)
+            {
+                return;
+            }
+
+            speakerText.Text = string.IsNullOrEmpty(name) ? "(No speaker)" : name;
         }
     }
 }
