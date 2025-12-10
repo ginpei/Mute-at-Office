@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mute_at_Office.Lib.Wifi
+namespace Mute_at_Office.Libs.Wifi
 {
     public partial class WifiStore : ObservableObject
     {

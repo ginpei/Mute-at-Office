@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Radios;
 
-namespace Mute_at_Office.Lib.Agent
+namespace Mute_at_Office.Libs.Agent
 {
     class LookoutAgent
     {

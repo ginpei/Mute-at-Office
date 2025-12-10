@@ -1,5 +1,5 @@
 using Microsoft.UI.Xaml.Controls;
-using Mute_at_Office.Lib.Agent;
+using Mute_at_Office.Libs.Agent;
 using Mute_at_Office.Libs.UserConfig;
 using System;
 
@@ -40,7 +40,7 @@ namespace Mute_at_Office.Pages.Dashboard
 
         private void WifiStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (sender is not Lib.Wifi.WifiStore s)
+            if (sender is not Libs.Wifi.WifiStore s)
             {
                 return;
             }
@@ -50,7 +50,7 @@ namespace Mute_at_Office.Pages.Dashboard
 
         private void AudioStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (sender is not Lib.Audio.AudioStore s)
+            if (sender is not Libs.Audio.AudioStore s)
             {
                 return;
             }

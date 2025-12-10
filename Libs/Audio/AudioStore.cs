@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Sms;
 using Windows.Foundation.Collections;
 
-namespace Mute_at_Office.Lib.Audio
+namespace Mute_at_Office.Libs.Audio
 {
     internal class AudioStore : ObservableObject, IDisposable, IMMNotificationClient
     {
