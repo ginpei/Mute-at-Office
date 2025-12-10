@@ -26,21 +26,20 @@ namespace Mute_at_Office.Lib.Agent
 
         private void WifiStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (sender is Wifi.WifiStore s)
+            if (sender is not Wifi.WifiStore s || e.PropertyName != "Ssid")
             {
-                if (e.PropertyName == "Ssid")
-                {
-                    if (s.Ssid == ssid)
-                    {
-                        Debug.WriteLine("#wifi OK!");
-                        audioStore.SetMute(false);
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"#wifi Uh ({s.Ssid})");
-                        audioStore.SetMute(true);
-                    }
-                }
+                return;
+            }
+
+            if (s.Ssid == ssid)
+            {
+                Debug.WriteLine("#wifi OK!");
+                audioStore.SetMute(false);
+            }
+            else
+            {
+                Debug.WriteLine($"#wifi Uh ({s.Ssid})");
+                audioStore.SetMute(true);
             }
         }
     }
