@@ -14,10 +14,9 @@ namespace Mute_at_Office.Libs.Agent
 
         public static LookoutAgent Instance => instance.Value;
 
-        private readonly string ssid = "";
-
         public readonly Audio.AudioStore audioStore = new();
         public readonly Wifi.WifiStore wifiStore = new();
+        public readonly UserConfig.UserConfigFile userConfigFile = UserConfig.UserConfigFile.Instance;
 
         private LookoutAgent()
         {
@@ -31,7 +30,7 @@ namespace Mute_at_Office.Libs.Agent
                 return;
             }
 
-            if (s.Ssid == ssid)
+            if (s.Ssid == userConfigFile.Current.Ssid)
             {
                 Debug.WriteLine("#wifi OK!");
                 audioStore.SetMute(false);
