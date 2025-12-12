@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -42,7 +43,15 @@ namespace Mute_at_Office
         /// Invoked when the application is launched.
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
-        protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        {
+            _window = new MainWindow();
+            _window.Activate();
+
+            _ = LoadConfigAsync();
+        }
+
+        private async Task LoadConfigAsync()
         {
             try
             {
@@ -54,9 +63,6 @@ namespace Mute_at_Office
                 // continue with defaults
                 // TODO show error message to user
             }
-
-            _window = new MainWindow();
-            _window.Activate();
         }
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Mute_at_Office.Libs.UserConfig
 {
-    class UserConfigFile
+    class UserConfigFile : IDisposable
     {
         // provide a singleton instance for easy access from UI code
         private static readonly Lazy<UserConfigFile> _instance = new(() => new UserConfigFile());
@@ -20,6 +20,7 @@ namespace Mute_at_Office.Libs.UserConfig
         private readonly string _filePath;
 
         private readonly SemaphoreSlim _semaphore = new(1, 1);
+        private bool _disposed;
         public UserConfig Current { get; private set; } = new UserConfig();
 
         private UserConfigFile()
@@ -33,16 +34,16 @@ namespace Mute_at_Office.Libs.UserConfig
 
         public async Task LoadAsync()
         {
-            await _semaphore.WaitAsync().ConfigureAwait(false);
+            await _semaphore.WaitAsync();
             try
             {
                 if (File.Exists(_filePath))
                 {
-                    //var json = await File.ReadAllTextAsync(_filePath).ConfigureAwait(false);
+                    //var json = await File.ReadAllTextAsync(_filePath);
 
                     await using var fs = File.OpenRead(_filePath);
                     var opts = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    Current = await JsonSerializer.DeserializeAsync<UserConfig>(fs, opts).ConfigureAwait(false)
+                    Current = await JsonSerializer.DeserializeAsync<UserConfig>(fs, opts)
                               ?? new UserConfig();
                 }
             }
@@ -54,18 +55,27 @@ namespace Mute_at_Office.Libs.UserConfig
 
         public async Task SaveAsync()
         {
-            await _semaphore.WaitAsync().ConfigureAwait(false);
+            await _semaphore.WaitAsync();
             try
             {
                 Directory.CreateDirectory(_directory);
                 await using var fs = File.Create(_filePath);
                 var opts = new JsonSerializerOptions { WriteIndented = true };
-                await JsonSerializer.SerializeAsync(fs, Current, opts).ConfigureAwait(false);
-                await fs.FlushAsync().ConfigureAwait(false);
+                await JsonSerializer.SerializeAsync(fs, Current, opts);
+                await fs.FlushAsync();
             }
             finally
             {
                 _semaphore.Release();
+            }
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _semaphore.Dispose();
+                _disposed = true;
             }
         }
     }
