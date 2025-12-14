@@ -20,7 +20,10 @@ namespace Mute_at_Office.Pages.Dashboard
                 LookoutAgent.Instance.audioStore.PropertyChanged += AudioStore_PropertyChanged;
             }
 
+            UserConfigFile.Instance.PropertyChanged += UserConfig_PropertyChanged;
+
             var cfg = UserConfigFile.Instance.Current;
+            System.Diagnostics.Debug.WriteLine($"dashboard init \"{cfg.Ssid}\" ({string.IsNullOrEmpty(cfg.Ssid)})");
             if (!string.IsNullOrEmpty(cfg.Ssid))
             {
                 if (this.FindName("SsidRun") is Microsoft.UI.Xaml.Documents.Run ssidRun)
@@ -56,6 +59,32 @@ namespace Mute_at_Office.Pages.Dashboard
             }
 
             RenderSpeaker(s.Name);
+        }
+
+        private void UserConfig_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (sender is not UserConfigFile configFile)
+            {
+                return;
+            }
+
+            var cfg = configFile.Current;
+
+            if (!string.IsNullOrEmpty(cfg.Ssid))
+            {
+                if (this.FindName("SsidRun") is Microsoft.UI.Xaml.Documents.Run ssidRun)
+                {
+                    ssidRun.Text = cfg.Ssid;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(cfg.SpeakerName))
+            {
+                if (this.FindName("SpeakerRun") is Microsoft.UI.Xaml.Documents.Run speakerRun)
+                {
+                    speakerRun.Text = cfg.SpeakerName;
+                }
+            }
         }
 
         private void RenderSsid(string ssid)

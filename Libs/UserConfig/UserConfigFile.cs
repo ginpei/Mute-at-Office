@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mute_at_Office.Libs.UserConfig
 {
-    class UserConfigFile : IDisposable
+    class UserConfigFile : INotifyPropertyChanged, IDisposable
     {
         // provide a singleton instance for easy access from UI code
         private static readonly Lazy<UserConfigFile> _instance = new(() => new UserConfigFile());
@@ -23,6 +24,8 @@ namespace Mute_at_Office.Libs.UserConfig
         private bool _disposed;
         public UserConfig Current { get; private set; } = new UserConfig();
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         private UserConfigFile()
         {
             var appName = "MuteAtOffice";
@@ -30,6 +33,11 @@ namespace Mute_at_Office.Libs.UserConfig
             var local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             _directory = Path.Combine(local, appName);
             _filePath = Path.Combine(_directory, "config.json");
+        }
+
+        public void NotifyPropertyChanged()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Current)));
         }
 
         public async Task LoadAsync()
@@ -45,6 +53,7 @@ namespace Mute_at_Office.Libs.UserConfig
                     var opts = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                     Current = await JsonSerializer.DeserializeAsync<UserConfig>(fs, opts)
                               ?? new UserConfig();
+                    NotifyPropertyChanged();
                 }
             }
             finally
@@ -63,6 +72,7 @@ namespace Mute_at_Office.Libs.UserConfig
                 var opts = new JsonSerializerOptions { WriteIndented = true };
                 await JsonSerializer.SerializeAsync(fs, Current, opts);
                 await fs.FlushAsync();
+                NotifyPropertyChanged();
             }
             finally
             {
