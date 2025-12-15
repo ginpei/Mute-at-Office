@@ -21,6 +21,8 @@ namespace Mute_at_Office.Libs.Agent
         private LookoutAgent()
         {
             wifiStore.PropertyChanged += WifiStore_PropertyChanged;
+            audioStore.PropertyChanged += AudioStore_PropertyChanged;
+            userConfigFile.PropertyChanged += UserConfigFile_PropertyChanged;
         }
 
         private void WifiStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -30,14 +32,37 @@ namespace Mute_at_Office.Libs.Agent
                 return;
             }
 
-            if (s.Ssid == userConfigFile.Current.Ssid)
+            updateByStatus();
+        }
+
+        private void AudioStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (sender is not Audio.AudioStore s || e.PropertyName != "Name")
             {
-                Debug.WriteLine("#wifi OK!");
+                return;
+            }
+
+            updateByStatus();
+        }
+
+        private void UserConfigFile_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            updateByStatus();
+        }
+
+        private void updateByStatus()
+        {
+            // do nothing if not target
+            if (audioStore.Name != userConfigFile.Current.SpeakerName) {
+                return;
+            }
+
+            if (wifiStore.Ssid == userConfigFile.Current.Ssid)
+            {
                 audioStore.SetMute(false);
             }
             else
             {
-                Debug.WriteLine($"#wifi Uh ({s.Ssid})");
                 audioStore.SetMute(true);
             }
         }
