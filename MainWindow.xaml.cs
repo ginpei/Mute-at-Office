@@ -13,6 +13,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Mute_at_Office.Pages.Dashboard;
+using Mute_at_Office.Pages.History;
 using Mute_at_Office.Pages.Settings;
 using CommunityToolkit.Mvvm.Input;
 using H.NotifyIcon;
@@ -77,6 +78,9 @@ namespace Mute_at_Office
             {
                 case "Dashboard":
                     ContentFrame.Navigate(typeof(DashboardPage));
+                    break;
+                case "History":
+                    ContentFrame.Navigate(typeof(HistoryPage));
                     break;
                 case "Settings":
                     ContentFrame.Navigate(typeof(SettingsPage));

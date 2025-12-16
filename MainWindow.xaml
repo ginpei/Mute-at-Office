@@ -24,6 +24,7 @@
             >
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Dashboard" Icon="ViewAll" Tag="Dashboard" />
+                <NavigationViewItem Content="History" Icon="List" Tag="History" />
             </NavigationView.MenuItems>
             <Frame x:Name="ContentFrame"/>
         </NavigationView>
