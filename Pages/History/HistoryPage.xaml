@@ -15,81 +15,31 @@
             FontWeight="SemiBold"
             />
         <StackPanel Spacing="4">
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Mute-at-Office] </Run> Muted the system
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [WiFi]</Run> SSID changed to FooBar-5G
-            </TextBlock>
-            <TextBlock TextWrapping="Wrap">
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Audio]</Run> Speaker changed to Speakers (PiyoPiyo super sound)
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Mute-at-Office] </Run> Muted the system
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [WiFi]</Run> SSID changed to FooBar-5G
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Mute-at-Office] </Run> Muted the system
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [WiFi]</Run> SSID changed to FooBar-5G
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Mute-at-Office] </Run> Muted the system
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [WiFi]</Run> SSID changed to FooBar-5G
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Mute-at-Office] </Run> Muted the system
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [WiFi]</Run> SSID changed to FooBar-5G
-            </TextBlock>
-            <TextBlock TextWrapping="Wrap">
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Audio]</Run> Speaker changed to Speakers (PiyoPiyo super sound)
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Mute-at-Office] </Run> Muted the system
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [WiFi]</Run> SSID changed to FooBar-5G
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Mute-at-Office] </Run> Muted the system
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [WiFi]</Run> SSID changed to FooBar-5G
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Mute-at-Office] </Run> Muted the system
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [WiFi]</Run> SSID changed to FooBar-5G
-            </TextBlock>
-            <TextBlock TextWrapping="Wrap">
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Audio]</Run> Speaker changed to Speakers (PiyoPiyo super sound)
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Mute-at-Office] </Run> Muted the system
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [WiFi]</Run> SSID changed to FooBar-5G
-            </TextBlock>
-            <TextBlock TextWrapping="Wrap">
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Audio]</Run> Speaker changed to Speakers (PiyoPiyo super sound)
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Mute-at-Office] </Run> Muted the system
-            </TextBlock>
-            <TextBlock>
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [WiFi]</Run> SSID changed to FooBar-5G
-            </TextBlock>
-            <TextBlock TextWrapping="Wrap">
-                <Run FontSize="10" FontWeight="Light">2000-01-23 45:67:89 - [Audio]</Run> Speaker changed to Speakers (PiyoPiyo super sound)
-            </TextBlock>
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Audio" Message="Speaker changed to Speakers (PiyoPiyo super sound)" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Audio" Message="Speaker changed to Speakers (PiyoPiyo super sound)" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Audio" Message="Speaker changed to Speakers (PiyoPiyo super sound)" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Audio" Message="Speaker changed to Speakers (PiyoPiyo super sound)" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
+            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Audio" Message="Speaker changed to Speakers (PiyoPiyo super sound)" />
         </StackPanel>
     </StackPanel>
 </Page>
