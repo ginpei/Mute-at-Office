@@ -36,6 +36,11 @@ namespace Mute_at_Office.Libs.Wifi
             set => SetProperty(ref _errorMessage, value);
         }
 
+        public bool IsConnected
+        {
+            get => WifiState == "Connected";
+        }
+
         public WifiStore()
         {
             _synchronizationContext = SynchronizationContext.Current;
