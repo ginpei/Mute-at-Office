@@ -8,5 +8,5 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <TextBlock x:Name="HistoryTextBlock" TextWrapping="Wrap" />
+    <TextBlock x:Name="HistoryTextBlock" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
 </UserControl>
