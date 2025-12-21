@@ -82,6 +82,7 @@ namespace Mute_at_Office.Libs.Agent
             }
             
             History.Insert(0, new LookoutHistoryRecord(eventType, message));
+            System.Diagnostics.Debug.WriteLine($"[LookoutAgent.History] [{eventType}] {message}");
         }
     }
 }
