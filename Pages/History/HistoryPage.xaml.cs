@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Mute_at_Office.Libs.Agent;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,6 +27,17 @@ namespace Mute_at_Office.Pages.History
         public HistoryPage()
         {
             InitializeComponent();
+
+            this.Loaded += HistoryPage_Loaded;
+        }
+
+        private void HistoryPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            var itemsControl = this.FindName("HistoryItemsControl") as ItemsControl;
+            if (itemsControl != null)
+            {
+                itemsControl.ItemsSource = LookoutAgent.Instance.History;
+            }
         }
     }
 }

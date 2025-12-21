@@ -14,32 +14,20 @@
             FontSize="28"
             FontWeight="SemiBold"
             />
-        <StackPanel Spacing="4">
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Audio" Message="Speaker changed to Speakers (PiyoPiyo super sound)" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Audio" Message="Speaker changed to Speakers (PiyoPiyo super sound)" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Audio" Message="Speaker changed to Speakers (PiyoPiyo super sound)" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Audio" Message="Speaker changed to Speakers (PiyoPiyo super sound)" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Mute-at-Office" Message="Muted the system" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="WiFi" Message="SSID changed to FooBar-5G" />
-            <local:HistoryItemControl DateTimeText="2000-01-23 45:67:89" EventType="Audio" Message="Speaker changed to Speakers (PiyoPiyo super sound)" />
-        </StackPanel>
+        <ItemsControl x:Name="HistoryItemsControl">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Spacing="4" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:HistoryItemControl 
+                        DateTimeText="{Binding DateTime}" 
+                        EventType="{Binding EventType}" 
+                        Message="{Binding Message}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </StackPanel>
 </Page>

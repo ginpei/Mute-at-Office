@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
+using Mute_at_Office.Libs.Agent;
 using System;
 
 namespace Mute_at_Office.Pages.History
@@ -10,16 +11,16 @@ namespace Mute_at_Office.Pages.History
         public static readonly DependencyProperty DateTimeTextProperty =
             DependencyProperty.Register(
                 nameof(DateTimeText),
-                typeof(string),
+                typeof(object),
                 typeof(HistoryItemControl),
-                new PropertyMetadata(string.Empty, OnPropertyChanged));
+                new PropertyMetadata(null, OnPropertyChanged));
 
         public static readonly DependencyProperty EventTypeProperty =
             DependencyProperty.Register(
                 nameof(EventType),
-                typeof(string),
+                typeof(object),
                 typeof(HistoryItemControl),
-                new PropertyMetadata(string.Empty, OnPropertyChanged));
+                new PropertyMetadata(null, OnPropertyChanged));
 
         public static readonly DependencyProperty MessageProperty =
             DependencyProperty.Register(
@@ -35,15 +36,15 @@ namespace Mute_at_Office.Pages.History
             Unloaded += HistoryItemControl_Unloaded;
         }
 
-        public string DateTimeText
+        public object DateTimeText
         {
-            get => (string)GetValue(DateTimeTextProperty);
+            get => GetValue(DateTimeTextProperty);
             set => SetValue(DateTimeTextProperty, value);
         }
 
-        public string EventType
+        public object EventType
         {
-            get => (string)GetValue(EventTypeProperty);
+            get => GetValue(EventTypeProperty);
             set => SetValue(EventTypeProperty, value);
         }
 
@@ -81,9 +82,29 @@ namespace Mute_at_Office.Pages.History
 
             HistoryTextBlock.Inlines.Clear();
             
+            var dateTimeStr = DateTimeText switch
+            {
+                DateTime dt => dt.ToString("yyyy-MM-dd HH:mm:ss"),
+                string s => s,
+                _ => DateTimeText?.ToString() ?? ""
+            };
+            
+            var eventTypeStr = EventType switch
+            {
+                LookoutEventType et => et switch
+                {
+                    LookoutEventType.MuteAtOffice => "Mute-at-Office",
+                    LookoutEventType.WiFi => "WiFi",
+                    LookoutEventType.Audio => "Audio",
+                    _ => et.ToString()
+                },
+                string s => s,
+                _ => EventType?.ToString() ?? ""
+            };
+            
             var dateTimeRun = new Run
             {
-                Text = $"{DateTimeText} - [{EventType}] ",
+                Text = $"{dateTimeStr} - [{eventTypeStr}] ",
                 FontSize = 10,
                 FontWeight = Microsoft.UI.Text.FontWeights.Light
             };
