@@ -28,10 +28,7 @@ namespace Mute_at_Office.Libs.UserConfig
 
         private UserConfigFile()
         {
-            var appName = "MuteAtOffice";
-
-            var local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            _directory = Path.Combine(local, appName);
+            _directory = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
             _filePath = Path.Combine(_directory, "config.json");
         }
 
@@ -67,7 +64,6 @@ namespace Mute_at_Office.Libs.UserConfig
             await _semaphore.WaitAsync();
             try
             {
-                Directory.CreateDirectory(_directory);
                 await using var fs = File.Create(_filePath);
                 var opts = new JsonSerializerOptions { WriteIndented = true };
                 await JsonSerializer.SerializeAsync(fs, Current, opts);
