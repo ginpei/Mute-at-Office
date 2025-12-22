@@ -11,21 +11,21 @@ namespace Mute_at_Office.Libs.Agent
 {
     class LookoutAgent
     {
-        private static readonly Lazy<LookoutAgent> instance = new(() => new LookoutAgent());
+        private static readonly Lazy<LookoutAgent> _instance = new(() => new LookoutAgent());
 
-        public static LookoutAgent Instance => instance.Value;
+        public static LookoutAgent Instance => _instance.Value;
 
-        public readonly Audio.AudioStore audioStore = new();
-        public readonly Wifi.WifiStore wifiStore = new();
-        public readonly UserConfig.UserConfigFile userConfigFile = UserConfig.UserConfigFile.Instance;
-        public readonly ObservableCollection<LookoutHistoryRecord> History = new();
-        public readonly int maxHistorySize = 100;
+        public Audio.AudioStore AudioStore { get; } = new();
+        public Wifi.WifiStore WifiStore { get; } = new();
+        public UserConfig.UserConfigFile UserConfigFile { get; } = UserConfig.UserConfigFile.Instance;
+        public ObservableCollection<LookoutHistoryRecord> History { get; } = new();
+        public int MaxHistorySize { get; } = 100;
 
         private LookoutAgent()
         {
-            wifiStore.PropertyChanged += WifiStore_PropertyChanged;
-            audioStore.PropertyChanged += AudioStore_PropertyChanged;
-            userConfigFile.PropertyChanged += UserConfigFile_PropertyChanged;
+            WifiStore.PropertyChanged += WifiStore_PropertyChanged;
+            AudioStore.PropertyChanged += AudioStore_PropertyChanged;
+            UserConfigFile.PropertyChanged += UserConfigFile_PropertyChanged;
         }
 
         private void WifiStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -34,9 +34,9 @@ namespace Mute_at_Office.Libs.Agent
             {
                 return;
             }
-            AddHistory(LookoutEventType.WiFi, wifiStore.IsConnected ? $"Connected to SSID: {wifiStore.Ssid}" : "Disconnected");
+            AddHistory(LookoutEventType.WiFi, WifiStore.IsConnected ? $"Connected to SSID: {WifiStore.Ssid}" : "Disconnected");
 
-            updateByStatus();
+            UpdateByStatus();
         }
 
         private void AudioStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -45,38 +45,38 @@ namespace Mute_at_Office.Libs.Agent
             {
                 return;
             }
-            AddHistory(LookoutEventType.Audio, $"Switched device: {audioStore.Name} ({(audioStore.IsMuted ? "Muted" : "Unmuted")})");
+            AddHistory(LookoutEventType.Audio, $"Switched device: {AudioStore.Name} ({(AudioStore.IsMuted ? "Muted" : "Unmuted")})");
 
-            updateByStatus();
+            UpdateByStatus();
         }
 
         private void UserConfigFile_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            updateByStatus();
+            UpdateByStatus();
         }
 
-        private void updateByStatus()
+        private void UpdateByStatus()
         {
             // do nothing if not target
-            if (audioStore.Name != userConfigFile.Current.SpeakerName) {
+            if (AudioStore.Name != UserConfigFile.Current.SpeakerName) {
                 return;
             }
 
-            if (wifiStore.Ssid == userConfigFile.Current.Ssid)
+            if (WifiStore.Ssid == UserConfigFile.Current.Ssid)
             {
-                audioStore.SetMute(false);
+                AudioStore.SetMute(false);
                 AddHistory(LookoutEventType.MuteAtOffice, "Unmuted");
             }
             else
             {
-                audioStore.SetMute(true);
+                AudioStore.SetMute(true);
                 AddHistory(LookoutEventType.MuteAtOffice, "Muted");
             }
         }
 
         private void AddHistory(LookoutEventType eventType, string message)
         {
-            while (History.Count >= maxHistorySize)
+            while (History.Count >= MaxHistorySize)
             {
                 History.RemoveAt(History.Count - 1);
             }

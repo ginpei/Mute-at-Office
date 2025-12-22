@@ -13,11 +13,11 @@ namespace Mute_at_Office.Pages.Dashboard
 
             if (LookoutAgent.Instance != null)
             {
-                RenderSsid(LookoutAgent.Instance.wifiStore.Ssid);
-                LookoutAgent.Instance.wifiStore.PropertyChanged += WifiStore_PropertyChanged;
+                RenderSsid(LookoutAgent.Instance.WifiStore.Ssid);
+                LookoutAgent.Instance.WifiStore.PropertyChanged += WifiStore_PropertyChanged;
 
-                RenderSpeaker(LookoutAgent.Instance.audioStore.Name);
-                LookoutAgent.Instance.audioStore.PropertyChanged += AudioStore_PropertyChanged;
+                RenderSpeaker(LookoutAgent.Instance.AudioStore.Name);
+                LookoutAgent.Instance.AudioStore.PropertyChanged += AudioStore_PropertyChanged;
             }
 
             UserConfigFile.Instance.PropertyChanged += UserConfig_PropertyChanged;
