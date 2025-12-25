@@ -2,11 +2,17 @@ using Microsoft.UI.Xaml.Controls;
 using Mute_at_Office.Libs.Agent;
 using Mute_at_Office.Libs.UserConfig;
 using System;
+using System.Collections.ObjectModel;
 
 namespace Mute_at_Office.Pages.Dashboard
 {
     public sealed partial class DashboardPage : Page
     {
+        public ObservableCollection<ZoneCondition> MyZoneConditions = [
+            new("My Speaker", "My SSID"),
+            new("Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker", "hehe SSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSID Speae"),
+        ];
+
         public DashboardPage()
         {
             InitializeComponent();

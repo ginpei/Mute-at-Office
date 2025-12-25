@@ -28,9 +28,9 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0">Speaker</TextBlock>
-                <TextBlock Grid.Row="0" Grid.Column="1" TextWrapping="Wrap">...</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" Text="{x:Bind ZoneCondition.SpeakerName, Mode=OneWay}" />
                 <TextBlock Grid.Row="1" Grid.Column="0">SSID</TextBlock>
-                <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap">...</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Text="{x:Bind ZoneCondition.Ssid, Mode=OneWay}" />
             </Grid>
             <FontIcon
                 Grid.Column="1"
