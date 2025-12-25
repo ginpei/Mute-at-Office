@@ -53,39 +53,7 @@
                 BorderThickness="1"
                 CornerRadius="4"
                 >
-                <Button
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Stretch"
-                    Padding="0"
-                    BorderThickness="0"
-                    >
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="32"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid Padding="12" RowSpacing="8" ColumnSpacing="12">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0">Speaker</TextBlock>
-                            <TextBlock Grid.Row="0" Grid.Column="1" TextWrapping="Wrap">...</TextBlock>
-                            <TextBlock Grid.Row="1" Grid.Column="0">SSID</TextBlock>
-                            <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap">...</TextBlock>
-                        </Grid>
-                        <FontIcon
-                            Grid.Column="1"
-                            FontFamily="Segoe MDL2 Assets"
-                            FontSize="16"
-                            Glyph="&#xE76C;"
-                            />
-                    </Grid>
-                </Button>
+                <local:SafeZoneItemControl />
 
                 <Border Height="1" BorderThickness="0,1,0,0" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" />
                 
