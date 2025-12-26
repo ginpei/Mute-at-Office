@@ -12,7 +12,8 @@
         HorizontalAlignment="Stretch"
         HorizontalContentAlignment="Stretch"
         Padding="0"
-        BorderThickness="0">
+        BorderThickness="0"
+        Click="Button_Clicked">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

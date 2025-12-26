@@ -60,7 +60,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <local:SafeZoneItemControl ZoneCondition="{Binding}" />
+                            <local:SafeZoneItemControl ZoneCondition="{Binding}" ItemClicked="SafeZoneItem_ItemClicked" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemContainerStyle>

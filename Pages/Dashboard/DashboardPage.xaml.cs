@@ -98,6 +98,11 @@ namespace Mute_at_Office.Pages.Dashboard
             }
         }
 
+        private void SafeZoneItem_ItemClicked(object sender, ZoneCondition zoneCondition)
+        {
+            System.Diagnostics.Debug.WriteLine($"clicked {zoneCondition.Ssid}");
+        }
+
         private void RenderSsid(string ssid)
         {
             if (this.FindName("SsidText") is not TextBlock ssidText)

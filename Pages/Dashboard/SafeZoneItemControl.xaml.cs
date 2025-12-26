@@ -19,8 +19,20 @@ public sealed partial class SafeZoneItemControl : UserControl
             typeof(SafeZoneItemControl),
             new PropertyMetadata(null));
 
+    public event System.EventHandler<ZoneCondition>? ItemClicked;
+
     public SafeZoneItemControl()
     {
         this.InitializeComponent();
+    }
+
+    private void Button_Clicked(object sender, RoutedEventArgs e)
+    {
+        if (ZoneCondition == null)
+        {
+            return;
+        }
+
+        ItemClicked?.Invoke(this, ZoneCondition);
     }
 }
