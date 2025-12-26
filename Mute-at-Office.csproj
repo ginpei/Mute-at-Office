@@ -72,6 +72,11 @@
   <ItemGroup>
     <None Include=".github\copilot-instruction.md" />
   </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\ZoneConditionEdit\ZoneConditionEditPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
 
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution

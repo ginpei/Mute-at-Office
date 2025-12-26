@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml.Controls;
 using Mute_at_Office.Libs.Agent;
 using Mute_at_Office.Libs.UserConfig;
+using Mute_at_Office.Pages.ZoneConditionEdit;
 using System;
 using System.Collections.ObjectModel;
 
@@ -100,7 +101,7 @@ namespace Mute_at_Office.Pages.Dashboard
 
         private void SafeZoneItem_ItemClicked(object sender, ZoneCondition zoneCondition)
         {
-            System.Diagnostics.Debug.WriteLine($"clicked {zoneCondition.Ssid}");
+            Frame.Navigate(typeof(ZoneConditionEditPage), zoneCondition);
         }
 
         private void RenderSsid(string ssid)
