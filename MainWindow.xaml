@@ -21,6 +21,8 @@
             CompactModeThresholdWidth="300"
             ExpandedModeThresholdWidth="500"
             SelectionChanged="NavigationView_SelectionChanged"
+            IsBackEnabled="{x:Bind ContentFrame.CanGoBack, Mode=OneWay}"
+            BackRequested="NavigationView_BackRequested"
             >
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Dashboard" Icon="ViewAll" Tag="Dashboard" />
