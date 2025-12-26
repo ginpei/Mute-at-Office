@@ -24,7 +24,8 @@ namespace Mute_at_Office.Pages.ZoneConditionEdit
     /// </summary>
     public sealed partial class ZoneConditionEditPage : Page
     {
-        public ZoneCondition ZoneCondition { get; set; } = new ZoneCondition("", "");
+        public ZoneCondition ZoneCondition { get; set; } = new ZoneCondition("", "", "");
+        public string SaveButtonText { get; set; } = "";
 
         public ZoneConditionEditPage()
         {
@@ -35,13 +36,41 @@ namespace Mute_at_Office.Pages.ZoneConditionEdit
         {
             base.OnNavigatedTo(e);
 
-            if (e.Parameter is not ZoneCondition zoneCondition0)
+            if (e.Parameter is not ZoneConditionEditParameters parameters)
             {
                 return;
             }
 
-            ZoneCondition = zoneCondition0;
-            System.Diagnostics.Debug.WriteLine($"Navigated to ZoneConditionEdit with {ZoneCondition}");
+            ZoneCondition = parameters.ZoneCondition;
+
+            SaveButtonText = parameters.Type == ZoneConditionEditType.New ? "Add" : "Update";
+            Bindings.Update();
+        }
+
+        private void SaveButton_Clicked(object sender, RoutedEventArgs args)
+        {
+            // TODO
+            System.Diagnostics.Debug.WriteLine($"click: {ZoneCondition.SpeakerName}, {ZoneCondition.Ssid}");
+        }
+
+        private void CancelButton_Clicked(object sender, RoutedEventArgs args)
+        {
+            // TODO
+            System.Diagnostics.Debug.WriteLine("cancel");
+        }
+    }
+
+    public enum ZoneConditionEditType { New, Update };
+
+    public class ZoneConditionEditParameters
+    {
+        public ZoneCondition ZoneCondition { get; set; }
+        public ZoneConditionEditType Type { get; set; }
+
+        public ZoneConditionEditParameters(ZoneConditionEditType type, ZoneCondition zoneCondition)
+        {
+            ZoneCondition = zoneCondition;
+            Type = type;
         }
     }
 }

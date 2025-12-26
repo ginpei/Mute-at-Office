@@ -14,9 +14,23 @@
                 FontSize="28"
                 FontWeight="SemiBold"
                 />
-        <StackPanel Spacing="8">
-            <TextBlock Text="{x:Bind ZoneCondition.Ssid, Mode=TwoWay}" />
-            <TextBlock Text="{x:Bind ZoneCondition.SpeakerName, Mode=TwoWay}" />
+        <Grid Padding="12" RowSpacing="8" ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Speaker</TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{x:Bind ZoneCondition.SpeakerName, Mode=TwoWay}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">SSID</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{x:Bind ZoneCondition.Ssid, Mode=TwoWay}" />
+        </Grid>
+        <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Content="{x:Bind SaveButtonText, Mode=OneTime}" Style="{StaticResource AccentButtonStyle}" Click="SaveButton_Clicked" />
+            <Button Content="Cancel" Click="CancelButton_Clicked" />
         </StackPanel>
     </StackPanel>
 </Page>

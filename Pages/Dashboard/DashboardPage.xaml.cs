@@ -1,3 +1,4 @@
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Mute_at_Office.Libs.Agent;
 using Mute_at_Office.Libs.UserConfig;
@@ -101,7 +102,13 @@ namespace Mute_at_Office.Pages.Dashboard
 
         private void SafeZoneItem_ItemClicked(object sender, ZoneCondition zoneCondition)
         {
-            Frame.Navigate(typeof(ZoneConditionEditPage), zoneCondition);
+            Frame.Navigate(typeof(ZoneConditionEditPage), new ZoneConditionEditParameters(ZoneConditionEditType.Update, zoneCondition));
+        }
+
+        private void AddConditionButton_Clicked(object sender, RoutedEventArgs args)
+        {
+            ZoneCondition condition = new("", LookoutAgent.Instance.AudioStore.Name, LookoutAgent.Instance.WifiStore.Ssid);
+            Frame.Navigate(typeof(ZoneConditionEditPage), new ZoneConditionEditParameters(ZoneConditionEditType.New, condition));
         }
 
         private void RenderSsid(string ssid)
