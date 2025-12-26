@@ -47,16 +47,30 @@
 
         <StackPanel Spacing="8">
             <TextBlock Text="Safe zones" FontWeight="SemiBold" VerticalAlignment="Center"/>
-            <StackPanel
-                Background="{ThemeResource ControlFillColorDefaultBrush}"
-                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                BorderThickness="1"
-                CornerRadius="4"
-                >
-                <local:SafeZoneItemControl ZoneCondition="{x:Bind MyZoneConditions[0]}" />
-                <Border Height="1" BorderThickness="0,1,0,0" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" />
-                <local:SafeZoneItemControl ZoneCondition="{x:Bind MyZoneConditions[1]}" />
-            </StackPanel>
+            <ItemsControl ItemsSource="{x:Bind MyZoneConditions, Mode=OneWay}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            Background="{ThemeResource ControlFillColorDefaultBrush}"
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1,1,1,0"
+                            CornerRadius="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:SafeZoneItemControl ZoneCondition="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="Padding" Value="0"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
         </StackPanel>
 
         <StackPanel Spacing="8">
