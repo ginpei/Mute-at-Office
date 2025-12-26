@@ -10,13 +10,13 @@ namespace Mute_at_Office.Pages.Dashboard
     public sealed partial class DashboardPage : Page
     {
         public ObservableCollection<ZoneCondition> MyZoneConditions = [
-            new("My Speaker", "My SSID"),
-            new("Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker", "hehe SSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSID Speae"),
-            new("My Speaker", "My SSID"),
-            new("My Speaker", "My SSID"),
-            new("My Speaker", "My SSID"),
-            new("My Speaker", "My SSID"),
-            new("My Speaker", "My SSID"),
+            new("1", "My Speaker", "My SSID"),
+            new("2", "Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker Speaker", "hehe SSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSIDSSID Speae"),
+            new("3", "My Speaker", "My SSID"),
+            new("4", "My Speaker", "My SSID"),
+            new("5", "My Speaker", "My SSID"),
+            new("6", "My Speaker", "My SSID"),
+            new("7", "My Speaker", "My SSID"),
         ];
 
         public DashboardPage()
