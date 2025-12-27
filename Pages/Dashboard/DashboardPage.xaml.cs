@@ -78,6 +78,8 @@ namespace Mute_at_Office.Pages.Dashboard
 
             var cfg = configFile.Current;
 
+            SafeZoneConditions = new ObservableCollection<ZoneCondition>(cfg.safeZoneConditions);
+
             if (!string.IsNullOrEmpty(cfg.Ssid))
             {
                 if (this.FindName("SsidRun") is Microsoft.UI.Xaml.Documents.Run ssidRun)
