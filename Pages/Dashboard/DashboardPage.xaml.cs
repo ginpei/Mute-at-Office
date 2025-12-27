@@ -46,7 +46,7 @@ namespace Mute_at_Office.Pages.Dashboard
                 }
             }
 
-            SafeZoneConditions = new ObservableCollection<ZoneCondition>(cfg.safeZoneConditions);
+            SafeZoneConditions = new ObservableCollection<ZoneCondition>(cfg.SafeZoneConditions);
         }
 
         private void WifiStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -78,7 +78,7 @@ namespace Mute_at_Office.Pages.Dashboard
 
             var cfg = configFile.Current;
 
-            SafeZoneConditions = new ObservableCollection<ZoneCondition>(cfg.safeZoneConditions);
+            SafeZoneConditions = new ObservableCollection<ZoneCondition>(cfg.SafeZoneConditions);
 
             if (!string.IsNullOrEmpty(cfg.Ssid))
             {

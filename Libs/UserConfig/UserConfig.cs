@@ -8,7 +8,7 @@ namespace Mute_at_Office.Libs.UserConfig
 {
     class UserConfig
     {
-        public List<ZoneCondition> safeZoneConditions { get; set; } = [];
+        public List<ZoneCondition> SafeZoneConditions { get; set; } = [];
 
         public string Ssid { get; set; } = "";
         public string SpeakerName { get; set; } = "";

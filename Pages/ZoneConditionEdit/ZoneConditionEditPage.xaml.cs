@@ -52,7 +52,7 @@ namespace Mute_at_Office.Pages.ZoneConditionEdit
 
         private async void SaveButton_Clicked(object sender, RoutedEventArgs args)
         {
-            var conditions = LookoutAgent.Instance.UserConfigFile.Current.safeZoneConditions;
+            var conditions = LookoutAgent.Instance.UserConfigFile.Current.SafeZoneConditions;
             if (EditType == ZoneConditionEditType.New)
             {
                 conditions.Add(new ZoneCondition(Guid.NewGuid().ToString(), ZoneCondition.SpeakerName, ZoneCondition.Ssid));
