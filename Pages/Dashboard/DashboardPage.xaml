@@ -9,6 +9,7 @@
     mc:Ignorable="d">
 
     <Page.Resources>
+        <local:EmptyCountToVisibilityVisibleConverter x:Key="EmptyCountToVisibilityVisibleConverter" />
         <Style TargetType="ToggleSwitch">
             <Setter Property="MinWidth" Value="80"/>
         </Style>
@@ -48,7 +49,10 @@
 
             <StackPanel Spacing="8">
                 <TextBlock Text="Safe zones" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                <ItemsControl ItemsSource="{x:Bind SafeZoneConditions, Mode=OneWay}">
+                <ItemsControl
+                    ItemsSource="{x:Bind SafeZoneConditions, Mode=OneWay}"
+                    Visibility="{x:Bind SafeZoneConditions.Count, Mode=OneWay, Converter={StaticResource EmptyCountToVisibilityVisibleConverter}, ConverterParameter=inverse}"
+                    >
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel
@@ -72,6 +76,12 @@
                         </Style>
                     </ItemsControl.ItemContainerStyle>
                 </ItemsControl>
+                <StackPanel
+                    Padding="12"
+                    Visibility="{x:Bind SafeZoneConditions.Count, Mode=OneWay, Converter={StaticResource EmptyCountToVisibilityVisibleConverter}}"
+                    >
+                    <TextBlock Text="No conditions yet." />
+                </StackPanel>
                 <Button Content="Add condition..." Click="AddConditionButton_Clicked"/>
             </StackPanel>
 

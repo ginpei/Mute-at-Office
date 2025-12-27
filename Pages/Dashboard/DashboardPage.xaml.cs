@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Data;
 using Mute_at_Office.Libs.Agent;
 using Mute_at_Office.Libs.UserConfig;
 using Mute_at_Office.Pages.ZoneConditionEdit;
@@ -123,6 +124,27 @@ namespace Mute_at_Office.Pages.Dashboard
             }
 
             speakerText.Text = string.IsNullOrEmpty(name) ? "(No speaker)" : name;
+        }
+    }
+
+    public partial class EmptyCountToVisibilityVisibleConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is not int count)
+            {
+                return Visibility.Collapsed;
+            }
+
+            var inverse = parameter?.ToString() == "inverse";
+            var isEmpty = count == 0;
+            var isVisible = inverse ? !isEmpty : isEmpty;
+            return isVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
         }
     }
 }
