@@ -48,7 +48,7 @@
 
             <StackPanel Spacing="8">
                 <TextBlock Text="Safe zones" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                <ItemsControl ItemsSource="{x:Bind MyZoneConditions, Mode=OneWay}">
+                <ItemsControl ItemsSource="{x:Bind SafeZoneConditions, Mode=OneWay}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel
