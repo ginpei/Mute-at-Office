@@ -50,6 +50,7 @@ namespace Mute_at_Office.Libs.UserConfig
                     var opts = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                     Current = await JsonSerializer.DeserializeAsync<UserConfig>(fs, opts)
                               ?? new UserConfig();
+                    System.Diagnostics.Debug.WriteLine($"[UserConfigFile] Loaded: {_filePath}");
                     NotifyPropertyChanged();
                 }
             }
@@ -68,6 +69,7 @@ namespace Mute_at_Office.Libs.UserConfig
                 var opts = new JsonSerializerOptions { WriteIndented = true };
                 await JsonSerializer.SerializeAsync(fs, Current, opts);
                 await fs.FlushAsync();
+                System.Diagnostics.Debug.WriteLine($"[UserConfigFile] Saved: {_filePath}");
                 NotifyPropertyChanged();
             }
             finally
