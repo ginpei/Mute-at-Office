@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Mute_at_Office.Libs.Agent;
 using Mute_at_Office.Libs.UserConfig;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace Mute_at_Office.Pages.ZoneConditionEdit
     public sealed partial class ZoneConditionEditPage : Page
     {
         public ZoneCondition ZoneCondition { get; set; } = new ZoneCondition("", "", "");
+        public ZoneConditionEditType EditType { get; set; } = ZoneConditionEditType.New;
         public string SaveButtonText { get; set; } = "";
 
         public ZoneConditionEditPage()
@@ -41,22 +43,42 @@ namespace Mute_at_Office.Pages.ZoneConditionEdit
                 return;
             }
 
-            ZoneCondition = parameters.ZoneCondition;
+            ZoneCondition = new ZoneCondition(parameters.ZoneCondition.ID, parameters.ZoneCondition.SpeakerName, parameters.ZoneCondition.Ssid);
+            EditType = parameters.Type;
+            SaveButtonText = EditType == ZoneConditionEditType.New ? "Add" : "Update";
 
-            SaveButtonText = parameters.Type == ZoneConditionEditType.New ? "Add" : "Update";
             Bindings.Update();
         }
 
         private void SaveButton_Clicked(object sender, RoutedEventArgs args)
         {
-            // TODO
-            System.Diagnostics.Debug.WriteLine($"click: {ZoneCondition.SpeakerName}, {ZoneCondition.Ssid}");
+            var conditions = LookoutAgent.Instance.UserConfigFile.Current.safeZoneConditions;
+            if (EditType == ZoneConditionEditType.New)
+            {
+                conditions.Add(new ZoneCondition(Guid.NewGuid().ToString(), ZoneCondition.SpeakerName, ZoneCondition.Ssid));
+            }
+            else
+            {
+                var existingCondition = conditions.FirstOrDefault(c => c.ID == ZoneCondition.ID);
+                if (existingCondition != null)
+                {
+                    existingCondition.SpeakerName = ZoneCondition.SpeakerName;
+                    existingCondition.Ssid = ZoneCondition.Ssid;
+                }
+            }
+
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
         }
 
         private void CancelButton_Clicked(object sender, RoutedEventArgs args)
         {
-            // TODO
-            System.Diagnostics.Debug.WriteLine("cancel");
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
         }
     }
 
