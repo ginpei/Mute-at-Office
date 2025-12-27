@@ -50,7 +50,7 @@ namespace Mute_at_Office.Pages.ZoneConditionEdit
             Bindings.Update();
         }
 
-        private void SaveButton_Clicked(object sender, RoutedEventArgs args)
+        private async void SaveButton_Clicked(object sender, RoutedEventArgs args)
         {
             var conditions = LookoutAgent.Instance.UserConfigFile.Current.safeZoneConditions;
             if (EditType == ZoneConditionEditType.New)
@@ -66,6 +66,8 @@ namespace Mute_at_Office.Pages.ZoneConditionEdit
                     existingCondition.Ssid = ZoneCondition.Ssid;
                 }
             }
+
+            await LookoutAgent.Instance.UserConfigFile.SaveAsync();
 
             if (Frame.CanGoBack)
             {
