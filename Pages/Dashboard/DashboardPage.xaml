@@ -39,10 +39,10 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0">SSID</TextBlock>
-                        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="SsidText">...</TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0">Speaker</TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="1" x:Name="SpeakerText">...</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="0">Speaker</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="SpeakerText">...</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="0">SSID</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="1" x:Name="SsidText">...</TextBlock>
                     </Grid>
                 </StackPanel>
             </StackPanel>
