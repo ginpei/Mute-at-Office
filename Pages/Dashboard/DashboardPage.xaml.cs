@@ -6,12 +6,50 @@ using Mute_at_Office.Libs.UserConfig;
 using Mute_at_Office.Pages.ZoneConditionEdit;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Xml.Linq;
 
 namespace Mute_at_Office.Pages.Dashboard;
 
-public sealed partial class DashboardPage : Page
+public sealed partial class DashboardPage : Page, INotifyPropertyChanged
 {
     public ObservableCollection<ZoneCondition> SafeZoneConditions = [];
+
+    private string _speakerName = "...";
+    public string SpeakerName
+    {
+        get => string.IsNullOrEmpty(_speakerName) ? "(No speaker)" : _speakerName;
+        set
+        {
+            if (_speakerName != value)
+            {
+                _speakerName = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    private string _ssid = "...";
+    public string Ssid
+    {
+        get => string.IsNullOrEmpty(_ssid) ? "(No WiFi)" : _ssid;
+        set
+        {
+            if (_ssid != value)
+            {
+                _ssid = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
     public DashboardPage()
     {
@@ -19,10 +57,10 @@ public sealed partial class DashboardPage : Page
 
         if (LookoutAgent.Instance != null)
         {
-            RenderSsid(LookoutAgent.Instance.WifiStore.Ssid);
+            Ssid = LookoutAgent.Instance.WifiStore.Ssid;
             LookoutAgent.Instance.WifiStore.PropertyChanged += WifiStore_PropertyChanged;
 
-            RenderSpeaker(LookoutAgent.Instance.AudioStore.Name);
+            SpeakerName = LookoutAgent.Instance.AudioStore.Name;
             LookoutAgent.Instance.AudioStore.PropertyChanged += AudioStore_PropertyChanged;
         }
 
@@ -38,7 +76,7 @@ public sealed partial class DashboardPage : Page
             return;
         }
 
-        RenderSsid(s.Ssid);
+        Ssid = s.Ssid;
     }
 
     private void AudioStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -48,7 +86,7 @@ public sealed partial class DashboardPage : Page
             return;
         }
 
-        RenderSpeaker(s.Name);
+        SpeakerName = s.Name;
     }
 
     private void UserConfig_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -72,26 +110,6 @@ public sealed partial class DashboardPage : Page
     {
         ZoneCondition condition = new("", LookoutAgent.Instance.AudioStore.Name, LookoutAgent.Instance.WifiStore.Ssid);
         Frame.Navigate(typeof(ZoneConditionEditPage), new ZoneConditionEditParameters(ZoneConditionEditType.New, condition));
-    }
-
-    private void RenderSsid(string ssid)
-    {
-        if (this.FindName("SsidText") is not TextBlock ssidText)
-        {
-            return;
-        }
-
-        ssidText.Text = string.IsNullOrEmpty(ssid) ? "(No WiFi)" : ssid;
-    }
-
-    private void RenderSpeaker(string name)
-    {
-        if (this.FindName("SpeakerText") is not TextBlock speakerText)
-        {
-            return;
-        }
-
-        speakerText.Text = string.IsNullOrEmpty(name) ? "(No speaker)" : name;
     }
 }
 
