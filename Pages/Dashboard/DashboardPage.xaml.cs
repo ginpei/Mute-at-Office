@@ -14,33 +14,31 @@ namespace Mute_at_Office.Pages.Dashboard;
 
 public sealed partial class DashboardPage : Page, INotifyPropertyChanged
 {
-    public ObservableCollection<ZoneCondition> SafeZoneConditions = [];
-
-    private string _speakerName = "...";
-    public string SpeakerName
+    public ObservableCollection<ZoneCondition> SafeZoneConditions
     {
-        get => string.IsNullOrEmpty(_speakerName) ? "(No speaker)" : _speakerName;
-        set
+        get
         {
-            if (_speakerName != value)
-            {
-                _speakerName = value;
-                OnPropertyChanged();
-            }
+            var config = LookoutAgent.Instance.UserConfigFile.Current;
+            return new ObservableCollection<ZoneCondition>(config.SafeZoneConditions);
         }
     }
 
-    private string _ssid = "...";
+    public string SpeakerName
+    {
+        get
+        {
+            var name = LookoutAgent.Instance.AudioStore.Name;
+            return string.IsNullOrEmpty(name) ? "(No speaker)" : name;
+        }
+    }
+
+
     public string Ssid
     {
-        get => string.IsNullOrEmpty(_ssid) ? "(No WiFi)" : _ssid;
-        set
+        get
         {
-            if (_ssid != value)
-            {
-                _ssid = value;
-                OnPropertyChanged();
-            }
+            var ssid = LookoutAgent.Instance.WifiStore.Ssid;
+            return string.IsNullOrEmpty(ssid) ? "(No WiFi)" : ssid;
         }
     }
 
@@ -55,50 +53,9 @@ public sealed partial class DashboardPage : Page, INotifyPropertyChanged
     {
         InitializeComponent();
 
-        if (LookoutAgent.Instance != null)
-        {
-            Ssid = LookoutAgent.Instance.WifiStore.Ssid;
-            LookoutAgent.Instance.WifiStore.PropertyChanged += WifiStore_PropertyChanged;
-
-            SpeakerName = LookoutAgent.Instance.AudioStore.Name;
-            LookoutAgent.Instance.AudioStore.PropertyChanged += AudioStore_PropertyChanged;
-        }
-
-        UserConfigFile.Instance.PropertyChanged += UserConfig_PropertyChanged;
-
-        SafeZoneConditions = new ObservableCollection<ZoneCondition>(UserConfigFile.Instance.Current.SafeZoneConditions);
-    }
-
-    private void WifiStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (sender is not Libs.Wifi.WifiStore s)
-        {
-            return;
-        }
-
-        Ssid = s.Ssid;
-    }
-
-    private void AudioStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (sender is not Libs.Audio.AudioStore s)
-        {
-            return;
-        }
-
-        SpeakerName = s.Name;
-    }
-
-    private void UserConfig_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (sender is not UserConfigFile configFile)
-        {
-            return;
-        }
-
-        var cfg = configFile.Current;
-
-        SafeZoneConditions = new ObservableCollection<ZoneCondition>(cfg.SafeZoneConditions);
+        LookoutAgent.Instance.WifiStore.PropertyChanged += (s, e) => OnPropertyChanged(nameof(Ssid));
+        LookoutAgent.Instance.AudioStore.PropertyChanged +=  (s, e) => OnPropertyChanged(nameof(SpeakerName));
+        UserConfigFile.Instance.PropertyChanged += (s, e) => OnPropertyChanged(nameof(SafeZoneConditions));
     }
 
     private void SafeZoneItem_ItemClicked(object sender, ZoneCondition zoneCondition)
