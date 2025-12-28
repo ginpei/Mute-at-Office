@@ -35,11 +35,21 @@ namespace Mute_at_Office
             InitializeComponent();
 
             this.Closed += OnWindowClosed;
+            ContentFrame.Navigated += (s, e) => Bindings.Update();
 
             AppWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 1200, Height = 1200 });
 
-            ContentFrame.Navigate(typeof(DashboardPage));
             MainNavigationView.SelectedItem = MainNavigationView.MenuItems[0];
+        }
+
+        private void NavigationView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+            if (!ContentFrame.CanGoBack)
+            {
+                return;
+            }
+
+            ContentFrame.GoBack();
         }
 
         private void OnWindowClosed(object sender, WindowEventArgs args)

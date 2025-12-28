@@ -24,40 +24,24 @@ namespace Mute_at_Office.Pages.Settings;
 /// </summary>
 public sealed partial class SettingsPage : Page
 {
+    private string FilePath { get; set; } = "";
+
     public SettingsPage()
     {
         InitializeComponent();
-        SsidTextBox.Text = UserConfigFile.Instance.Current.Ssid ?? string.Empty;
-        SpeakerNameTextBox.Text = UserConfigFile.Instance.Current.SpeakerName ?? string.Empty;
+
+        FilePath = UserConfigFile.Instance.FilePath;
     }
 
-    private async void OnLoadClicked(object? sender, RoutedEventArgs e)
+    private async void OnReloadClicked(object? sender, RoutedEventArgs e)
     {
         try
         {
             await UserConfigFile.Instance.LoadAsync();
-
-            SsidTextBox.Text = UserConfigFile.Instance.Current.Ssid ?? string.Empty;
-            SpeakerNameTextBox.Text = UserConfigFile.Instance.Current.SpeakerName ?? string.Empty;
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Failed to load user config: {ex}");
-        }
-    }
-
-    private async void OnSaveClicked(object? sender, RoutedEventArgs e)
-    {
-        try
-        {
-            UserConfigFile.Instance.Current.Ssid = SsidTextBox.Text ?? string.Empty;
-            UserConfigFile.Instance.Current.SpeakerName = SpeakerNameTextBox.Text ?? string.Empty;
-
-            await UserConfigFile.Instance.SaveAsync();
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Failed to save user config: {ex}");
         }
     }
 }

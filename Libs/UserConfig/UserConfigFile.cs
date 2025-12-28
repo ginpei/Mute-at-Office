@@ -18,7 +18,7 @@ namespace Mute_at_Office.Libs.UserConfig
         public static UserConfigFile Instance => _instance.Value;
 
         private readonly string _directory;
-        private readonly string _filePath;
+        public string FilePath { get; } = "";
 
         private readonly SemaphoreSlim _semaphore = new(1, 1);
         private bool _disposed;
@@ -29,7 +29,7 @@ namespace Mute_at_Office.Libs.UserConfig
         private UserConfigFile()
         {
             _directory = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
-            _filePath = Path.Combine(_directory, "config.json");
+            FilePath = Path.Combine(_directory, "config.json");
         }
 
         public void NotifyPropertyChanged()
@@ -42,14 +42,15 @@ namespace Mute_at_Office.Libs.UserConfig
             await _semaphore.WaitAsync();
             try
             {
-                if (File.Exists(_filePath))
+                if (File.Exists(FilePath))
                 {
                     //var json = await File.ReadAllTextAsync(_filePath);
 
-                    await using var fs = File.OpenRead(_filePath);
+                    await using var fs = File.OpenRead(FilePath);
                     var opts = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                     Current = await JsonSerializer.DeserializeAsync<UserConfig>(fs, opts)
                               ?? new UserConfig();
+                    System.Diagnostics.Debug.WriteLine($"[UserConfigFile] Loaded: {FilePath}");
                     NotifyPropertyChanged();
                 }
             }
@@ -64,10 +65,11 @@ namespace Mute_at_Office.Libs.UserConfig
             await _semaphore.WaitAsync();
             try
             {
-                await using var fs = File.Create(_filePath);
+                await using var fs = File.Create(FilePath);
                 var opts = new JsonSerializerOptions { WriteIndented = true };
                 await JsonSerializer.SerializeAsync(fs, Current, opts);
                 await fs.FlushAsync();
+                System.Diagnostics.Debug.WriteLine($"[UserConfigFile] Saved: {FilePath}");
                 NotifyPropertyChanged();
             }
             finally

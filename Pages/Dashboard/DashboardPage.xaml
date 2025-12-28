@@ -9,107 +9,81 @@
     mc:Ignorable="d">
 
     <Page.Resources>
+        <local:EmptyCountToVisibilityVisibleConverter x:Key="EmptyCountToVisibilityVisibleConverter" />
         <Style TargetType="ToggleSwitch">
             <Setter Property="MinWidth" Value="80"/>
         </Style>
     </Page.Resources>
 
-    <StackPanel Spacing="26" Margin="20,30">
-        <TextBlock
-            Text="Mute at Office"
-            FontSize="28"
-            FontWeight="SemiBold"
-            />
-        <StackPanel Spacing="8">
-            <TextBlock Text="Status" FontWeight="SemiBold" VerticalAlignment="Center"/>
-            <StackPanel
-                Background="{ThemeResource ControlFillColorDefaultBrush}"
-                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                BorderThickness="1"
-                CornerRadius="4"
-                >
-                <Grid Padding="12" RowSpacing="8" ColumnSpacing="12">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0">SSID</TextBlock>
-                    <TextBlock Grid.Row="0" Grid.Column="1" x:Name="SsidText">...</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="0">Speaker</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="1" x:Name="SpeakerText">...</TextBlock>
-                </Grid>
+    <ScrollViewer>
+        <StackPanel Spacing="26" Margin="20,30">
+            <TextBlock
+                Text="Mute at Office"
+                FontSize="28"
+                FontWeight="SemiBold"
+                />
+            <StackPanel Spacing="8">
+                <TextBlock Text="Status" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <StackPanel
+                    Background="{ThemeResource ControlFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    >
+                    <Grid Padding="12" RowSpacing="8" ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0">Speaker</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="SpeakerText">...</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="0">SSID</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="1" x:Name="SsidText">...</TextBlock>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Spacing="8">
+                <TextBlock Text="Safe zones" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <ItemsControl
+                    ItemsSource="{x:Bind SafeZoneConditions, Mode=OneWay}"
+                    Visibility="{x:Bind SafeZoneConditions.Count, Mode=OneWay, Converter={StaticResource EmptyCountToVisibilityVisibleConverter}, ConverterParameter=inverse}"
+                    >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel
+                                Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1,1,1,0"
+                                CornerRadius="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:SafeZoneItemControl ZoneCondition="{Binding}" ItemClicked="SafeZoneItem_ItemClicked" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="Padding" Value="0"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+                <StackPanel
+                    Padding="12"
+                    Visibility="{x:Bind SafeZoneConditions.Count, Mode=OneWay, Converter={StaticResource EmptyCountToVisibilityVisibleConverter}}"
+                    >
+                    <TextBlock Text="No conditions yet." />
+                </StackPanel>
+                <Button Content="Add condition..." Click="AddConditionButton_Clicked"/>
             </StackPanel>
         </StackPanel>
-        <StackPanel Spacing="8">
-            <TextBlock Text="Actions" FontWeight="SemiBold" VerticalAlignment="Center"/>
-            <StackPanel
-                Background="{ThemeResource ControlFillColorDefaultBrush}"
-                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                BorderThickness="1"
-                CornerRadius="4"
-                >
-                <Button
-                    Background="Transparent"
-                    BorderThickness="0"
-                    HorizontalContentAlignment="Stretch"
-                    HorizontalAlignment="Stretch"
-                    AutomationProperties.Name="Open rule details"
-                    Padding="12"
-                    >
-                    <Grid HorizontalAlignment="Stretch">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="16"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Grid.Column="0" TextWrapping="Wrap">
-                            <Run FontWeight="Bold">Revert</Run>
-                            <LineBreak/>
-                            when
-                            <Run FontWeight="Bold">WiFi SSID</Run>
-                            is
-                            <Run x:Name="SsidRun" FontWeight="Bold">...</Run>
-                            <LineBreak/>
-                            <!--and
-                            <Run FontWeight="Bold">Speaker</Run>
-                            is
-                            <Run x:Name="SpeakerRun" FontWeight="Bold">...</Run>-->
-                        </TextBlock>
-
-                        <FontIcon Grid.Column="1" FontFamily="Segoe MDL2 Assets" FontSize="16" Glyph="&#xE76C;" HorizontalAlignment="Right"/>
-                    </Grid>
-                </Button>
-
-                <Border BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"/>
-
-                <Button
-                    Background="Transparent"
-                    BorderThickness="0"
-                    HorizontalContentAlignment="Stretch"
-                    HorizontalAlignment="Stretch"
-                    AutomationProperties.Name="Open rule details"
-                    Padding="12"
-                    >
-                    <Grid HorizontalAlignment="Stretch">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="16"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Grid.Column="0" TextWrapping="Wrap">
-                            <Run FontWeight="Bold">Mute</Run>
-                            <LineBreak/>
-                            otherwise
-                        </TextBlock>
-
-                        <FontIcon Grid.Column="1" FontFamily="Segoe MDL2 Assets" FontSize="16" Glyph="&#xE76C;" HorizontalAlignment="Right"/>
-                    </Grid>
-                </Button>
-            </StackPanel>
-        </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </Page>
