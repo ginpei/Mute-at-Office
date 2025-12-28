@@ -14,15 +14,6 @@ namespace Mute_at_Office.Pages.Dashboard;
 
 public sealed partial class DashboardPage : Page, INotifyPropertyChanged
 {
-    public ObservableCollection<ZoneCondition> SafeZoneConditions
-    {
-        get
-        {
-            var config = LookoutAgent.Instance.UserConfigFile.Current;
-            return new ObservableCollection<ZoneCondition>(config.SafeZoneConditions);
-        }
-    }
-
     public string SpeakerName
     {
         get
@@ -39,6 +30,15 @@ public sealed partial class DashboardPage : Page, INotifyPropertyChanged
         {
             var ssid = LookoutAgent.Instance.WifiStore.Ssid;
             return string.IsNullOrEmpty(ssid) ? "(No WiFi)" : ssid;
+        }
+    }
+
+    public ObservableCollection<ZoneCondition> SafeZoneConditions
+    {
+        get
+        {
+            var config = LookoutAgent.Instance.UserConfigFile.Current;
+            return new ObservableCollection<ZoneCondition>(config.SafeZoneConditions);
         }
     }
 
