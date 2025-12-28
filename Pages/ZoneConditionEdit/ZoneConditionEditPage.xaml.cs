@@ -27,7 +27,9 @@ namespace Mute_at_Office.Pages.ZoneConditionEdit
     {
         public ZoneCondition ZoneCondition { get; set; } = new ZoneCondition("", "", "");
         public ZoneConditionEditType EditType { get; set; } = ZoneConditionEditType.New;
+
         public string SaveButtonText { get; set; } = "";
+        public Visibility DeleteButtonVisivility = Visibility.Collapsed;
 
         public ZoneConditionEditPage()
         {
@@ -46,6 +48,7 @@ namespace Mute_at_Office.Pages.ZoneConditionEdit
             ZoneCondition = new ZoneCondition(parameters.ZoneCondition.ID, parameters.ZoneCondition.SpeakerName, parameters.ZoneCondition.Ssid);
             EditType = parameters.Type;
             SaveButtonText = EditType == ZoneConditionEditType.New ? "Add" : "Update";
+            DeleteButtonVisivility = EditType == ZoneConditionEditType.New ? Visibility.Collapsed : Visibility.Visible;
 
             Bindings.Update();
         }

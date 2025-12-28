@@ -37,7 +37,7 @@
                 <Button Content="{x:Bind SaveButtonText, Mode=OneTime}" Style="{StaticResource AccentButtonStyle}" Click="SaveButton_Clicked" />
                 <Button Content="Cancel" Click="CancelButton_Clicked" />
             </StackPanel>
-            <Button Grid.Column="1" Content="Delete" Click="DeleteButton_Clicked" />
+            <Button Grid.Column="1" Content="Delete" Click="DeleteButton_Clicked" Visibility="{x:Bind DeleteButtonVisivility}" />
         </Grid>
     </StackPanel>
 </Page>
