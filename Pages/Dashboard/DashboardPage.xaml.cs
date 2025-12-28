@@ -28,25 +28,7 @@ namespace Mute_at_Office.Pages.Dashboard
 
             UserConfigFile.Instance.PropertyChanged += UserConfig_PropertyChanged;
 
-            var cfg = UserConfigFile.Instance.Current;
-            System.Diagnostics.Debug.WriteLine($"dashboard init \"{cfg.Ssid}\" ({string.IsNullOrEmpty(cfg.Ssid)})");
-            if (!string.IsNullOrEmpty(cfg.Ssid))
-            {
-                if (this.FindName("SsidRun") is Microsoft.UI.Xaml.Documents.Run ssidRun)
-                {
-                    ssidRun.Text = cfg.Ssid;
-                }
-            }
-
-            if (!string.IsNullOrEmpty(cfg.SpeakerName))
-            {
-                if (this.FindName("SpeakerRun") is Microsoft.UI.Xaml.Documents.Run speakerRun)
-                {
-                    speakerRun.Text = cfg.SpeakerName;
-                }
-            }
-
-            SafeZoneConditions = new ObservableCollection<ZoneCondition>(cfg.SafeZoneConditions);
+            SafeZoneConditions = new ObservableCollection<ZoneCondition>(UserConfigFile.Instance.Current.SafeZoneConditions);
         }
 
         private void WifiStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -79,22 +61,6 @@ namespace Mute_at_Office.Pages.Dashboard
             var cfg = configFile.Current;
 
             SafeZoneConditions = new ObservableCollection<ZoneCondition>(cfg.SafeZoneConditions);
-
-            if (!string.IsNullOrEmpty(cfg.Ssid))
-            {
-                if (this.FindName("SsidRun") is Microsoft.UI.Xaml.Documents.Run ssidRun)
-                {
-                    ssidRun.Text = cfg.Ssid;
-                }
-            }
-
-            if (!string.IsNullOrEmpty(cfg.SpeakerName))
-            {
-                if (this.FindName("SpeakerRun") is Microsoft.UI.Xaml.Documents.Run speakerRun)
-                {
-                    speakerRun.Text = cfg.SpeakerName;
-                }
-            }
         }
 
         private void SafeZoneItem_ItemClicked(object sender, ZoneCondition zoneCondition)

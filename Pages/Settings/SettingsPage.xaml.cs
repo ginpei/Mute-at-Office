@@ -27,8 +27,6 @@ public sealed partial class SettingsPage : Page
     public SettingsPage()
     {
         InitializeComponent();
-        SsidTextBox.Text = UserConfigFile.Instance.Current.Ssid ?? string.Empty;
-        SpeakerNameTextBox.Text = UserConfigFile.Instance.Current.SpeakerName ?? string.Empty;
     }
 
     private async void OnLoadClicked(object? sender, RoutedEventArgs e)
@@ -36,9 +34,6 @@ public sealed partial class SettingsPage : Page
         try
         {
             await UserConfigFile.Instance.LoadAsync();
-
-            SsidTextBox.Text = UserConfigFile.Instance.Current.Ssid ?? string.Empty;
-            SpeakerNameTextBox.Text = UserConfigFile.Instance.Current.SpeakerName ?? string.Empty;
         }
         catch (Exception ex)
         {
@@ -50,9 +45,6 @@ public sealed partial class SettingsPage : Page
     {
         try
         {
-            UserConfigFile.Instance.Current.Ssid = SsidTextBox.Text ?? string.Empty;
-            UserConfigFile.Instance.Current.SpeakerName = SpeakerNameTextBox.Text ?? string.Empty;
-
             await UserConfigFile.Instance.SaveAsync();
         }
         catch (Exception ex)
