@@ -44,4 +44,9 @@ public sealed partial class SettingsPage : Page
             System.Diagnostics.Debug.WriteLine($"Failed to load user config: {ex}");
         }
     }
+
+    private void OpenButton_Clicked(object? sender, RoutedEventArgs args)
+    {
+        System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{FilePath}\"");
+    }
 }
