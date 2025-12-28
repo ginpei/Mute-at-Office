@@ -45,7 +45,7 @@ namespace Mute_at_Office.Libs.Agent
             {
                 return;
             }
-            AddHistory(LookoutEventType.Audio, $"Switched device: {AudioStore.Name} ({(AudioStore.IsMuted ? "Muted" : "Unmuted")})");
+            AddHistory(LookoutEventType.Audio, $"Switched device: {AudioStore.Name}");
 
             UpdateByStatus();
         }
@@ -57,20 +57,72 @@ namespace Mute_at_Office.Libs.Agent
 
         private void UpdateByStatus()
         {
-            // do nothing if not target
-            if (AudioStore.Name != UserConfigFile.Current.SpeakerName) {
+            var speakerName = AudioStore.Name;
+            var ssid = WifiStore.Ssid;
+            var allConditions = UserConfigFile.Current.SafeZoneConditions;
+            var isMuted = AudioStore.IsMuted;
+
+            if (allConditions.Count() == 0)
+            {
+                // no need to log
                 return;
             }
 
-            if (WifiStore.Ssid == UserConfigFile.Current.Ssid)
+            var speakerConditions = allConditions.Where(condition => condition.SpeakerName == speakerName);
+            if (speakerConditions.Count() == 0)
             {
-                AudioStore.SetMute(false);
-                AddHistory(LookoutEventType.MuteAtOffice, "Unmuted");
+                if (isMuted)
+                {
+                    AudioStore.SetMute(false);
+                    AddHistory(LookoutEventType.MuteAtOffice, "Unmuted (non-target speaker)");
+                }
+                else
+                {
+                    AddHistory(LookoutEventType.MuteAtOffice, "Keep unmuted (non-target speaker)");
+                }
+
+                return;
+            }
+
+            if (!WifiStore.IsConnected)
+            {
+                if (isMuted)
+                {
+                    AddHistory(LookoutEventType.MuteAtOffice, "Keep muted (no WiFi)");
+                }
+                else
+                {
+                    AudioStore.SetMute(true);
+                    AddHistory(LookoutEventType.MuteAtOffice, "Muted (no WiFi)");
+                }
+
+                return;
+            }
+
+            var isSafe = speakerConditions.Any(condition => condition.Ssid == ssid);
+            if (isSafe)
+            {
+                if (isMuted)
+                {
+                    AudioStore.SetMute(false);
+                    AddHistory(LookoutEventType.MuteAtOffice, "Unmuted (matched safe zone)");
+                }
+                else
+                {
+                    AddHistory(LookoutEventType.MuteAtOffice, "Keep unmuted (matched safe zone)");
+                }
             }
             else
             {
-                AudioStore.SetMute(true);
-                AddHistory(LookoutEventType.MuteAtOffice, "Muted");
+                if (isMuted)
+                {
+                    AddHistory(LookoutEventType.MuteAtOffice, "Keep muted (no safe zone match)");
+                }
+                else
+                {
+                    AudioStore.SetMute(true);
+                    AddHistory(LookoutEventType.MuteAtOffice, "Muted (no safe zone match)");
+                }
             }
         }
 
@@ -80,7 +132,7 @@ namespace Mute_at_Office.Libs.Agent
             {
                 History.RemoveAt(History.Count - 1);
             }
-            
+
             History.Insert(0, new LookoutHistoryRecord(eventType, message));
             System.Diagnostics.Debug.WriteLine($"[LookoutAgent.History] [{eventType}] {message}");
         }
