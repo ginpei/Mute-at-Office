@@ -38,11 +38,14 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0">Speaker</TextBlock>
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="{x:Bind SpeakerName, Mode=OneWay}"/>
                         <TextBlock Grid.Row="1" Grid.Column="0">SSID</TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind Ssid, Mode=OneWay}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0">Examination</TextBlock>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind ExamResultText, Mode=OneWay}"/>
                     </Grid>
                 </StackPanel>
             </StackPanel>

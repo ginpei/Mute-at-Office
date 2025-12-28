@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -9,7 +10,7 @@ using Windows.Devices.Radios;
 
 namespace Mute_at_Office.Libs.Agent;
 
-class LookoutAgent
+class LookoutAgent : ObservableObject
 {
     private static readonly Lazy<LookoutAgent> _instance = new(() => new LookoutAgent());
 
@@ -20,6 +21,13 @@ class LookoutAgent
     public UserConfig.UserConfigFile UserConfigFile { get; } = UserConfig.UserConfigFile.Instance;
     public ObservableCollection<LookoutHistoryRecord> History { get; } = new();
     public int MaxHistorySize { get; } = 100;
+
+    private LookoutExamResult _result = LookoutExamResult.NoConditions;
+    public LookoutExamResult ExamResult
+    {
+        get => _result;
+        private set => SetProperty(ref _result, value);
+    }
 
     private LookoutAgent()
     {
@@ -65,6 +73,7 @@ class LookoutAgent
         if (allConditions.Count() == 0)
         {
             // no need to log
+            ExamResult = LookoutExamResult.NoConditions;
             return;
         }
 
@@ -81,6 +90,8 @@ class LookoutAgent
                 AddHistory(LookoutEventType.MuteAtOffice, "Keep unmuted (non-target speaker)");
             }
 
+            ExamResult = LookoutExamResult.NotTargetSpeaker;
+
             return;
         }
 
@@ -95,6 +106,8 @@ class LookoutAgent
                 AudioStore.SetMute(true);
                 AddHistory(LookoutEventType.MuteAtOffice, "Muted (no WiFi)");
             }
+
+            ExamResult = LookoutExamResult.NoWifi;
 
             return;
         }
@@ -111,6 +124,8 @@ class LookoutAgent
             {
                 AddHistory(LookoutEventType.MuteAtOffice, "Keep unmuted (matched safe zone)");
             }
+
+            ExamResult = LookoutExamResult.Safe;
         }
         else
         {
@@ -123,6 +138,8 @@ class LookoutAgent
                 AudioStore.SetMute(true);
                 AddHistory(LookoutEventType.MuteAtOffice, "Muted (no safe zone match)");
             }
+
+            ExamResult = LookoutExamResult.NotSafe;
         }
     }
 
@@ -136,4 +153,13 @@ class LookoutAgent
         History.Insert(0, new LookoutHistoryRecord(eventType, message));
         System.Diagnostics.Debug.WriteLine($"[LookoutAgent.History] [{eventType}] {message}");
     }
+}
+
+enum LookoutExamResult
+{
+    NoConditions,
+    NotTargetSpeaker,
+    NoWifi,
+    NotSafe,
+    Safe,
 }

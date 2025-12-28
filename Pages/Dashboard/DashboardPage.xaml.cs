@@ -33,6 +33,36 @@ public sealed partial class DashboardPage : Page, INotifyPropertyChanged
         }
     }
 
+    public string ExamResultText
+    {
+        get
+        {
+            var result = LookoutAgent.Instance.ExamResult;
+            if (result == LookoutExamResult.NoConditions)
+            {
+                return "(No safe zones)";
+            }
+            if (result == LookoutExamResult.NotTargetSpeaker)
+            {
+                return "Not target speaker";
+            }
+            if (result == LookoutExamResult.NoWifi)
+            {
+                return "No WiFi connection";
+            }
+            if (result == LookoutExamResult.NotSafe)
+            {
+                return "Not safe";
+            }
+            if (result == LookoutExamResult.Safe)
+            {
+                return "Safe";
+            }
+
+            return "???";
+        }
+    }
+
     public ObservableCollection<ZoneCondition> SafeZoneConditions
     {
         get
@@ -53,6 +83,7 @@ public sealed partial class DashboardPage : Page, INotifyPropertyChanged
     {
         InitializeComponent();
 
+        LookoutAgent.Instance.PropertyChanged += (s, e) => OnPropertyChanged(nameof(ExamResultText));
         LookoutAgent.Instance.WifiStore.PropertyChanged += (s, e) => OnPropertyChanged(nameof(Ssid));
         LookoutAgent.Instance.AudioStore.PropertyChanged +=  (s, e) => OnPropertyChanged(nameof(SpeakerName));
         UserConfigFile.Instance.PropertyChanged += (s, e) => OnPropertyChanged(nameof(SafeZoneConditions));
