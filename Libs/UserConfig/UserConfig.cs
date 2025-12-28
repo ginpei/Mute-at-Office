@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mute_at_Office.Libs.UserConfig
+namespace Mute_at_Office.Libs.UserConfig;
+
+class UserConfig
 {
-    class UserConfig
-    {
-        public List<ZoneCondition> SafeZoneConditions { get; set; } = [];
-    }
+    public List<ZoneCondition> SafeZoneConditions { get; set; } = [];
 }

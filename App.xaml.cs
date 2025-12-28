@@ -21,48 +21,47 @@ using Mute_at_Office.Libs.UserConfig;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Mute_at_Office
+namespace Mute_at_Office;
+
+/// <summary>
+/// Provides application-specific behavior to supplement the default Application class.
+/// </summary>
+public partial class App : Application
 {
+    private Window? _window;
+
     /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
+    /// Initializes the singleton application object.  This is the first line of authored code
+    /// executed, and as such is the logical equivalent of main() or WinMain().
     /// </summary>
-    public partial class App : Application
+    public App()
     {
-        private Window? _window;
+        InitializeComponent();
+    }
 
-        /// <summary>
-        /// Initializes the singleton application object.  This is the first line of authored code
-        /// executed, and as such is the logical equivalent of main() or WinMain().
-        /// </summary>
-        public App()
+    /// <summary>
+    /// Invoked when the application is launched.
+    /// </summary>
+    /// <param name="args">Details about the launch request and process.</param>
+    protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+    {
+        _window = new MainWindow();
+        _window.Activate();
+
+        _ = LoadConfigAsync();
+    }
+
+    private async Task LoadConfigAsync()
+    {
+        try
         {
-            InitializeComponent();
+            await UserConfigFile.Instance.LoadAsync();
         }
-
-        /// <summary>
-        /// Invoked when the application is launched.
-        /// </summary>
-        /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        catch (Exception ex)
         {
-            _window = new MainWindow();
-            _window.Activate();
-
-            _ = LoadConfigAsync();
-        }
-
-        private async Task LoadConfigAsync()
-        {
-            try
-            {
-                await UserConfigFile.Instance.LoadAsync();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Failed loading user config at startup: {ex}");
-                // continue with defaults
-                // TODO show error message to user
-            }
+            System.Diagnostics.Debug.WriteLine($"Failed loading user config at startup: {ex}");
+            // continue with defaults
+            // TODO show error message to user
         }
     }
 }

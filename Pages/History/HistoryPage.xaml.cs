@@ -17,27 +17,26 @@ using Windows.Foundation.Collections;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Mute_at_Office.Pages.History
+namespace Mute_at_Office.Pages.History;
+
+/// <summary>
+/// An empty page that can be used on its own or navigated to within a Frame.
+/// </summary>
+public sealed partial class HistoryPage : Page
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class HistoryPage : Page
+    public HistoryPage()
     {
-        public HistoryPage()
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            this.Loaded += HistoryPage_Loaded;
-        }
+        this.Loaded += HistoryPage_Loaded;
+    }
 
-        private void HistoryPage_Loaded(object sender, RoutedEventArgs e)
+    private void HistoryPage_Loaded(object sender, RoutedEventArgs e)
+    {
+        var itemsControl = this.FindName("HistoryItemsControl") as ItemsControl;
+        if (itemsControl != null)
         {
-            var itemsControl = this.FindName("HistoryItemsControl") as ItemsControl;
-            if (itemsControl != null)
-            {
-                itemsControl.ItemsSource = LookoutAgent.Instance.History;
-            }
+            itemsControl.ItemsSource = LookoutAgent.Instance.History;
         }
     }
 }

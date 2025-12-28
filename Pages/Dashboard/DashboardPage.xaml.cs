@@ -7,112 +7,111 @@ using Mute_at_Office.Pages.ZoneConditionEdit;
 using System;
 using System.Collections.ObjectModel;
 
-namespace Mute_at_Office.Pages.Dashboard
+namespace Mute_at_Office.Pages.Dashboard;
+
+public sealed partial class DashboardPage : Page
 {
-    public sealed partial class DashboardPage : Page
+    public ObservableCollection<ZoneCondition> SafeZoneConditions = [];
+
+    public DashboardPage()
     {
-        public ObservableCollection<ZoneCondition> SafeZoneConditions = [];
+        InitializeComponent();
 
-        public DashboardPage()
+        if (LookoutAgent.Instance != null)
         {
-            InitializeComponent();
+            RenderSsid(LookoutAgent.Instance.WifiStore.Ssid);
+            LookoutAgent.Instance.WifiStore.PropertyChanged += WifiStore_PropertyChanged;
 
-            if (LookoutAgent.Instance != null)
-            {
-                RenderSsid(LookoutAgent.Instance.WifiStore.Ssid);
-                LookoutAgent.Instance.WifiStore.PropertyChanged += WifiStore_PropertyChanged;
-
-                RenderSpeaker(LookoutAgent.Instance.AudioStore.Name);
-                LookoutAgent.Instance.AudioStore.PropertyChanged += AudioStore_PropertyChanged;
-            }
-
-            UserConfigFile.Instance.PropertyChanged += UserConfig_PropertyChanged;
-
-            SafeZoneConditions = new ObservableCollection<ZoneCondition>(UserConfigFile.Instance.Current.SafeZoneConditions);
+            RenderSpeaker(LookoutAgent.Instance.AudioStore.Name);
+            LookoutAgent.Instance.AudioStore.PropertyChanged += AudioStore_PropertyChanged;
         }
 
-        private void WifiStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (sender is not Libs.Wifi.WifiStore s)
-            {
-                return;
-            }
+        UserConfigFile.Instance.PropertyChanged += UserConfig_PropertyChanged;
 
-            RenderSsid(s.Ssid);
-        }
-
-        private void AudioStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (sender is not Libs.Audio.AudioStore s)
-            {
-                return;
-            }
-
-            RenderSpeaker(s.Name);
-        }
-
-        private void UserConfig_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (sender is not UserConfigFile configFile)
-            {
-                return;
-            }
-
-            var cfg = configFile.Current;
-
-            SafeZoneConditions = new ObservableCollection<ZoneCondition>(cfg.SafeZoneConditions);
-        }
-
-        private void SafeZoneItem_ItemClicked(object sender, ZoneCondition zoneCondition)
-        {
-            Frame.Navigate(typeof(ZoneConditionEditPage), new ZoneConditionEditParameters(ZoneConditionEditType.Update, zoneCondition));
-        }
-
-        private void AddConditionButton_Clicked(object sender, RoutedEventArgs args)
-        {
-            ZoneCondition condition = new("", LookoutAgent.Instance.AudioStore.Name, LookoutAgent.Instance.WifiStore.Ssid);
-            Frame.Navigate(typeof(ZoneConditionEditPage), new ZoneConditionEditParameters(ZoneConditionEditType.New, condition));
-        }
-
-        private void RenderSsid(string ssid)
-        {
-            if (this.FindName("SsidText") is not TextBlock ssidText)
-            {
-                return;
-            }
-
-            ssidText.Text = string.IsNullOrEmpty(ssid) ? "(No WiFi)" : ssid;
-        }
-
-        private void RenderSpeaker(string name)
-        {
-            if (this.FindName("SpeakerText") is not TextBlock speakerText)
-            {
-                return;
-            }
-
-            speakerText.Text = string.IsNullOrEmpty(name) ? "(No speaker)" : name;
-        }
+        SafeZoneConditions = new ObservableCollection<ZoneCondition>(UserConfigFile.Instance.Current.SafeZoneConditions);
     }
 
-    public partial class EmptyCountToVisibilityVisibleConverter : IValueConverter
+    private void WifiStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        public object Convert(object value, Type targetType, object parameter, string language)
+        if (sender is not Libs.Wifi.WifiStore s)
         {
-            if (value is not int count)
-            {
-                return Visibility.Collapsed;
-            }
-
-            var inverse = parameter?.ToString() == "inverse";
-            var isEmpty = count == 0;
-            var isVisible = inverse ? !isEmpty : isEmpty;
-            return isVisible ? Visibility.Visible : Visibility.Collapsed;
+            return;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        RenderSsid(s.Ssid);
+    }
+
+    private void AudioStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (sender is not Libs.Audio.AudioStore s)
         {
-            throw new NotImplementedException();
+            return;
         }
+
+        RenderSpeaker(s.Name);
+    }
+
+    private void UserConfig_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (sender is not UserConfigFile configFile)
+        {
+            return;
+        }
+
+        var cfg = configFile.Current;
+
+        SafeZoneConditions = new ObservableCollection<ZoneCondition>(cfg.SafeZoneConditions);
+    }
+
+    private void SafeZoneItem_ItemClicked(object sender, ZoneCondition zoneCondition)
+    {
+        Frame.Navigate(typeof(ZoneConditionEditPage), new ZoneConditionEditParameters(ZoneConditionEditType.Update, zoneCondition));
+    }
+
+    private void AddConditionButton_Clicked(object sender, RoutedEventArgs args)
+    {
+        ZoneCondition condition = new("", LookoutAgent.Instance.AudioStore.Name, LookoutAgent.Instance.WifiStore.Ssid);
+        Frame.Navigate(typeof(ZoneConditionEditPage), new ZoneConditionEditParameters(ZoneConditionEditType.New, condition));
+    }
+
+    private void RenderSsid(string ssid)
+    {
+        if (this.FindName("SsidText") is not TextBlock ssidText)
+        {
+            return;
+        }
+
+        ssidText.Text = string.IsNullOrEmpty(ssid) ? "(No WiFi)" : ssid;
+    }
+
+    private void RenderSpeaker(string name)
+    {
+        if (this.FindName("SpeakerText") is not TextBlock speakerText)
+        {
+            return;
+        }
+
+        speakerText.Text = string.IsNullOrEmpty(name) ? "(No speaker)" : name;
+    }
+}
+
+public partial class EmptyCountToVisibilityVisibleConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, string language)
+    {
+        if (value is not int count)
+        {
+            return Visibility.Collapsed;
+        }
+
+        var inverse = parameter?.ToString() == "inverse";
+        var isEmpty = count == 0;
+        var isVisible = inverse ? !isEmpty : isEmpty;
+        return isVisible ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
+    {
+        throw new NotImplementedException();
     }
 }

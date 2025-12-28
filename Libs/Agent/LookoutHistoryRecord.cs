@@ -4,44 +4,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mute_at_Office.Libs.Agent
+namespace Mute_at_Office.Libs.Agent;
+
+public enum LookoutEventType
 {
-    public enum LookoutEventType
+    MuteAtOffice,
+    WiFi,
+    Audio
+}
+
+public record LookoutHistoryRecord
+{
+    public Guid Id { get; init; }
+    public DateTime DateTime { get; init; }
+    public LookoutEventType EventType { get; init; }
+    public string Message { get; init; }
+
+    public LookoutHistoryRecord(LookoutEventType eventType, string message, DateTime? dateTime = null, Guid? id = null)
     {
-        MuteAtOffice,
-        WiFi,
-        Audio
+        Id = id ?? Guid.NewGuid();
+        DateTime = dateTime ?? DateTime.Now;
+        EventType = eventType;
+        Message = message;
     }
 
-    public record LookoutHistoryRecord
+    public string GetEventTypeDisplayName()
     {
-        public Guid Id { get; init; }
-        public DateTime DateTime { get; init; }
-        public LookoutEventType EventType { get; init; }
-        public string Message { get; init; }
-
-        public LookoutHistoryRecord(LookoutEventType eventType, string message, DateTime? dateTime = null, Guid? id = null)
+        return EventType switch
         {
-            Id = id ?? Guid.NewGuid();
-            DateTime = dateTime ?? DateTime.Now;
-            EventType = eventType;
-            Message = message;
-        }
+            LookoutEventType.MuteAtOffice => "Mute-at-Office",
+            LookoutEventType.WiFi => "WiFi",
+            LookoutEventType.Audio => "Audio",
+            _ => EventType.ToString()
+        };
+    }
 
-        public string GetEventTypeDisplayName()
-        {
-            return EventType switch
-            {
-                LookoutEventType.MuteAtOffice => "Mute-at-Office",
-                LookoutEventType.WiFi => "WiFi",
-                LookoutEventType.Audio => "Audio",
-                _ => EventType.ToString()
-            };
-        }
-
-        public string GetFormattedDateTime()
-        {
-            return DateTime.ToString("yyyy-MM-dd HH:mm:ss");
-        }
+    public string GetFormattedDateTime()
+    {
+        return DateTime.ToString("yyyy-MM-dd HH:mm:ss");
     }
 }

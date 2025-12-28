@@ -8,109 +8,108 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mute_at_Office.Libs.Wifi
+namespace Mute_at_Office.Libs.Wifi;
+
+public partial class WifiStore : ObservableObject
 {
-    public partial class WifiStore : ObservableObject
+    private NativeWifiPlayer? _wifiPlayer;
+    private readonly SynchronizationContext? _synchronizationContext;
+
+    private string _wifiState = "Initializing...";
+    public string WifiState
     {
-        private NativeWifiPlayer? _wifiPlayer;
-        private readonly SynchronizationContext? _synchronizationContext;
+        get => _wifiState;
+        set => SetProperty(ref _wifiState, value);
+    }
 
-        private string _wifiState = "Initializing...";
-        public string WifiState
+    private string _ssid = "";
+    public string Ssid
+    {
+        get => _ssid;
+        set => SetProperty(ref _ssid, value);
+    }
+
+    private string _errorMessage = "";
+    public string ErrorMessage
+    {
+        get => _errorMessage;
+        set => SetProperty(ref _errorMessage, value);
+    }
+
+    public bool IsConnected
+    {
+        get => WifiState == "Connected";
+    }
+
+    public WifiStore()
+    {
+        _synchronizationContext = SynchronizationContext.Current;
+
+        try
         {
-            get => _wifiState;
-            set => SetProperty(ref _wifiState, value);
+            _wifiPlayer = new NativeWifiPlayer();
+            WifiState = "Pending...";
+        }
+        catch (UnauthorizedAccessException)
+        {
+            WifiState = "Failed to start up";
+            ErrorMessage = "Permission required for WiFi.";
         }
 
-        private string _ssid = "";
-        public string Ssid
+        if (_wifiPlayer != null)
         {
-            get => _ssid;
-            set => SetProperty(ref _ssid, value);
+            _wifiPlayer.ConnectionChanged += WifiPlayer_ConnectionChanged;
         }
 
-        private string _errorMessage = "";
-        public string ErrorMessage
+        UpdateWifiStatus(false);
+    }
+
+    private void WifiPlayer_ConnectionChanged(object? sender, ConnectionChangedEventArgs e)
+    {
+        Debug.WriteLine($"ConnectionChangedState: {e.ChangedState.ToString()}");
+
+        var pending = e.ChangedState != ConnectionChangedState.Completed && e.ChangedState != ConnectionChangedState.Disconnected && e.ChangedState != ConnectionChangedState.Failed;
+
+        // Marshal the call back to the UI thread to avoid cross-thread exceptions
+        if (_synchronizationContext != null)
         {
-            get => _errorMessage;
-            set => SetProperty(ref _errorMessage, value);
+            _synchronizationContext.Post(_ => UpdateWifiStatus(pending), null);
+        }
+        else
+        {
+            // Fallback for non-UI scenarios
+            Task.Run(() => UpdateWifiStatus(pending));
+        }
+    }
+
+    private void UpdateWifiStatus(bool pending)
+    {
+        if (_wifiPlayer == null)
+        {
+            return;
         }
 
-        public bool IsConnected
+
+        if (pending)
         {
-            get => WifiState == "Connected";
+            WifiState = "Pending...";
+            Ssid = "";
         }
-
-        public WifiStore()
+        else
         {
-            _synchronizationContext = SynchronizationContext.Current;
-
-            try
+            var ssids = NativeWifi.EnumerateConnectedNetworkSsids();
+            if (ssids.Count() > 0)
             {
-                _wifiPlayer = new NativeWifiPlayer();
-                WifiState = "Pending...";
-            }
-            catch (UnauthorizedAccessException)
-            {
-                WifiState = "Failed to start up";
-                ErrorMessage = "Permission required for WiFi.";
-            }
-
-            if (_wifiPlayer != null)
-            {
-                _wifiPlayer.ConnectionChanged += WifiPlayer_ConnectionChanged;
-            }
-
-            UpdateWifiStatus(false);
-        }
-
-        private void WifiPlayer_ConnectionChanged(object? sender, ConnectionChangedEventArgs e)
-        {
-            Debug.WriteLine($"ConnectionChangedState: {e.ChangedState.ToString()}");
-
-            var pending = e.ChangedState != ConnectionChangedState.Completed && e.ChangedState != ConnectionChangedState.Disconnected && e.ChangedState != ConnectionChangedState.Failed;
-
-            // Marshal the call back to the UI thread to avoid cross-thread exceptions
-            if (_synchronizationContext != null)
-            {
-                _synchronizationContext.Post(_ => UpdateWifiStatus(pending), null);
+                WifiState = "Connected";
+                Ssid = ssids.First().ToString();
             }
             else
             {
-                // Fallback for non-UI scenarios
-                Task.Run(() => UpdateWifiStatus(pending));
-            }
-        }
-
-        private void UpdateWifiStatus(bool pending)
-        {
-            if (_wifiPlayer == null)
-            {
-                return;
-            }
-
-
-            if (pending)
-            {
-                WifiState = "Pending...";
+                WifiState = "Not Connected";
                 Ssid = "";
             }
-            else
-            {
-                var ssids = NativeWifi.EnumerateConnectedNetworkSsids();
-                if (ssids.Count() > 0)
-                {
-                    WifiState = "Connected";
-                    Ssid = ssids.First().ToString();
-                }
-                else
-                {
-                    WifiState = "Not Connected";
-                    Ssid = "";
-                }
-            }
-
-            System.Diagnostics.Debug.WriteLine($"WifiStore: {WifiState} {Ssid}");
         }
+
+        System.Diagnostics.Debug.WriteLine($"WifiStore: {WifiState} {Ssid}");
     }
 }

@@ -21,81 +21,80 @@ using H.NotifyIcon;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Mute_at_Office
+namespace Mute_at_Office;
+
+/// <summary>
+/// An empty window that can be used on its own or navigated to within a Frame.
+/// </summary>
+public sealed partial class MainWindow : Window
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class MainWindow : Window
+    private bool _isExitRequested;
+
+    public MainWindow()
     {
-        private bool _isExitRequested;
+        InitializeComponent();
 
-        public MainWindow()
+        this.Closed += OnWindowClosed;
+        ContentFrame.Navigated += (s, e) => Bindings.Update();
+
+        AppWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 1200, Height = 1200 });
+
+        MainNavigationView.SelectedItem = MainNavigationView.MenuItems[0];
+    }
+
+    private void NavigationView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+    {
+        if (!ContentFrame.CanGoBack)
         {
-            InitializeComponent();
-
-            this.Closed += OnWindowClosed;
-            ContentFrame.Navigated += (s, e) => Bindings.Update();
-
-            AppWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 1200, Height = 1200 });
-
-            MainNavigationView.SelectedItem = MainNavigationView.MenuItems[0];
+            return;
         }
 
-        private void NavigationView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
-        {
-            if (!ContentFrame.CanGoBack)
-            {
-                return;
-            }
+        ContentFrame.GoBack();
+    }
 
-            ContentFrame.GoBack();
+    private void OnWindowClosed(object sender, WindowEventArgs args)
+    {
+        if (!_isExitRequested)
+        {
+            args.Handled = true;
+            this.Hide();
+        }
+    }
+
+    [RelayCommand]
+    public void CloseWindow()
+    {
+        _isExitRequested = true;
+        Application.Current.Exit();
+    }
+
+    [RelayCommand]
+    public void ShowWindow()
+    {
+        this.Show();
+        this.Activate();
+    }
+
+    private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+    {
+        if (args.SelectedItem is not NavigationViewItem selectedItem)
+        {
+            return;
         }
 
-        private void OnWindowClosed(object sender, WindowEventArgs args)
+        var tag = selectedItem.Tag?.ToString();
+
+        switch (tag)
         {
-            if (!_isExitRequested)
-            {
-                args.Handled = true;
-                this.Hide();
-            }
-        }
-
-        [RelayCommand]
-        public void CloseWindow()
-        {
-            _isExitRequested = true;
-            Application.Current.Exit();
-        }
-
-        [RelayCommand]
-        public void ShowWindow()
-        {
-            this.Show();
-            this.Activate();
-        }
-
-        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
-        {
-            if (args.SelectedItem is not NavigationViewItem selectedItem)
-            {
-                return;
-            }
-
-            var tag = selectedItem.Tag?.ToString();
-
-            switch (tag)
-            {
-                case "Dashboard":
-                    ContentFrame.Navigate(typeof(DashboardPage));
-                    break;
-                case "History":
-                    ContentFrame.Navigate(typeof(HistoryPage));
-                    break;
-                case "Settings":
-                    ContentFrame.Navigate(typeof(SettingsPage));
-                    break;
-            }
+            case "Dashboard":
+                ContentFrame.Navigate(typeof(DashboardPage));
+                break;
+            case "History":
+                ContentFrame.Navigate(typeof(HistoryPage));
+                break;
+            case "Settings":
+                ContentFrame.Navigate(typeof(SettingsPage));
+                break;
         }
     }
 }
