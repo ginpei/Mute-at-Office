@@ -82,6 +82,38 @@ namespace Mute_at_Office.Pages.ZoneConditionEdit
                 Frame.GoBack();
             }
         }
+
+        private async void DeleteButton_Clicked(object sender, RoutedEventArgs args)
+        {
+            var dialog = new ContentDialog
+            {
+                //Title = "Delete zone condition",
+                Content = "Are you sure?",
+                PrimaryButtonText = "Delete",
+                CloseButtonText = "Cancel",
+                DefaultButton = ContentDialogButton.Primary,
+                XamlRoot = this.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+            if (result != ContentDialogResult.Primary)
+            {
+                return;
+            }
+
+            var conditions = LookoutAgent.Instance.UserConfigFile.Current.SafeZoneConditions;
+            var existingCondition = conditions.FirstOrDefault(c => c.ID == ZoneCondition.ID);
+            if (existingCondition != null)
+            {
+                conditions.Remove(existingCondition);
+                await LookoutAgent.Instance.UserConfigFile.SaveAsync();
+            }
+
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
+        }
     }
 
     public enum ZoneConditionEditType { New, Update };

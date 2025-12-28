@@ -28,9 +28,16 @@
             <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">SSID</TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{x:Bind ZoneCondition.Ssid, Mode=TwoWay}" />
         </Grid>
-        <StackPanel Orientation="Horizontal" Spacing="8">
-            <Button Content="{x:Bind SaveButtonText, Mode=OneTime}" Style="{StaticResource AccentButtonStyle}" Click="SaveButton_Clicked" />
-            <Button Content="Cancel" Click="CancelButton_Clicked" />
-        </StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                <Button Content="{x:Bind SaveButtonText, Mode=OneTime}" Style="{StaticResource AccentButtonStyle}" Click="SaveButton_Clicked" />
+                <Button Content="Cancel" Click="CancelButton_Clicked" />
+            </StackPanel>
+            <Button Grid.Column="1" Content="Delete" Click="DeleteButton_Clicked" />
+        </Grid>
     </StackPanel>
 </Page>
