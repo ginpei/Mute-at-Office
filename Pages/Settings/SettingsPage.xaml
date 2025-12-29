@@ -8,14 +8,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel>
+    <StackPanel Spacing="26" Margin="20,30">
         <TextBlock
-            Text="Settings" 
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center" 
-            FontSize="24"
+            Text="Settings"
+            FontSize="28"
+            FontWeight="SemiBold"
             />
-        <StackPanel Orientation="Vertical" Margin="12" Spacing="12">
+        <StackPanel Orientation="Vertical" Spacing="12">
             <TextBox Header="File path" Text="{x:Bind FilePath, Mode=OneWay}" IsReadOnly="True" />
             <Grid>
                 <Grid.ColumnDefinitions>
