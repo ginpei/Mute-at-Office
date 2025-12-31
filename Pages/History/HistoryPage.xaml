@@ -8,26 +8,28 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Spacing="26" Margin="20,30">
-        <TextBlock
+    <ScrollView>
+        <StackPanel Spacing="26" Margin="20,30">
+            <TextBlock
             Text="Hisory"
             FontSize="28"
             FontWeight="SemiBold"
             />
-        <ItemsControl x:Name="HistoryItemsControl">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Spacing="4" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <local:HistoryItemControl 
+            <ItemsControl x:Name="HistoryItemsControl">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:HistoryItemControl 
                         DateTimeText="{Binding DateTime}" 
                         EventType="{Binding EventType}" 
                         Message="{Binding Message}" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollView>
 </Page>
