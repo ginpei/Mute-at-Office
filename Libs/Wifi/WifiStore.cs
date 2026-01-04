@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 
 namespace Mute_at_Office.Libs.Wifi;
 
-public partial class WifiStore : ObservableObject
+public partial class WifiStore : ObservableObject, IDisposable
 {
     private NativeWifiPlayer? _wifiPlayer;
+    private bool _disposed;
     private readonly SynchronizationContext? _synchronizationContext;
 
     private string _wifiState = "Initializing...";
@@ -111,5 +112,19 @@ public partial class WifiStore : ObservableObject
         }
 
         System.Diagnostics.Debug.WriteLine($"WifiStore: {WifiState} {Ssid}");
+    }
+
+    public void Dispose()
+    {
+        if (_disposed) return;
+
+        if (_wifiPlayer != null)
+        {
+            _wifiPlayer.ConnectionChanged -= WifiPlayer_ConnectionChanged;
+            _wifiPlayer.Dispose();
+            _wifiPlayer = null;
+        }
+
+        _disposed = true;
     }
 }

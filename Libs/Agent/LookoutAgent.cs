@@ -10,7 +10,7 @@ using Windows.Devices.Radios;
 
 namespace Mute_at_Office.Libs.Agent;
 
-class LookoutAgent : ObservableObject
+class LookoutAgent : ObservableObject, IDisposable
 {
     private static readonly Lazy<LookoutAgent> _instance = new(() => new LookoutAgent());
 
@@ -21,6 +21,8 @@ class LookoutAgent : ObservableObject
     public UserConfig.UserConfigFile UserConfigFile { get; } = UserConfig.UserConfigFile.Instance;
     public ObservableCollection<LookoutHistoryRecord> History { get; } = new();
     public int MaxHistorySize { get; } = 100;
+
+    private bool _disposed;
 
     private LookoutExamResult _result = LookoutExamResult.NoConditions;
     public LookoutExamResult ExamResult
@@ -152,6 +154,23 @@ class LookoutAgent : ObservableObject
 
         History.Insert(0, new LookoutHistoryRecord(eventType, message));
         System.Diagnostics.Debug.WriteLine($"[LookoutAgent.History] [{eventType}] {message}");
+    }
+
+    // Note: LookoutAgent is a singleton that lives for the entire application lifetime.
+    // This Dispose implementation is provided for completeness and proper resource ownership,
+    // but in practice it won't be called until application shutdown.
+    public void Dispose()
+    {
+        if (_disposed) return;
+
+        WifiStore.PropertyChanged -= WifiStore_PropertyChanged;
+        AudioStore.PropertyChanged -= AudioStore_PropertyChanged;
+        UserConfigFile.PropertyChanged -= UserConfigFile_PropertyChanged;
+
+        WifiStore.Dispose();
+        AudioStore.Dispose();
+
+        _disposed = true;
     }
 }
 
