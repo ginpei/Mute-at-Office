@@ -34,6 +34,9 @@ public sealed partial class MainWindow : Window
     {
         InitializeComponent();
 
+        // Event handlers are intentionally not unsubscribed.
+        // MainWindow is a singleton that lives for the entire application lifetime.
+        // Cleanup happens automatically when Application.Current.Exit() is called.
         this.Closed += OnWindowClosed;
         ContentFrame.Navigated += (s, e) => Bindings.Update();
 
