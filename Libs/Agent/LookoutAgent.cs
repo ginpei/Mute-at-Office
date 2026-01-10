@@ -46,7 +46,7 @@ class LookoutAgent : ObservableObject, IDisposable
         }
         AddHistory(LookoutEventType.WiFi, WifiStore.IsConnected ? $"Connected to SSID: {WifiStore.Ssid}" : "Disconnected");
 
-        UpdateByStatus();
+        _ = Task.Run(() => UpdateByStatus());
     }
 
     private void AudioStore_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -57,12 +57,12 @@ class LookoutAgent : ObservableObject, IDisposable
         }
         AddHistory(LookoutEventType.Audio, $"Switched device: {AudioStore.Name}");
 
-        UpdateByStatus();
+        _ = Task.Run(() => UpdateByStatus());
     }
 
     private void UserConfigFile_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        UpdateByStatus();
+        _ = Task.Run(() => UpdateByStatus());
     }
 
     private void UpdateByStatus()
