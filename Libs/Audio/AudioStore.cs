@@ -60,11 +60,15 @@ internal class AudioStore : ObservableObject, IDisposable, IMMNotificationClient
             return;
         }
 
+        var name = device.FriendlyName;
+        var volume = (uint)(device.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
+        var isMuted = device.AudioEndpointVolume.Mute;
+
         dispatcher.TryEnqueue(() =>
         {
-            Name = device.FriendlyName;
-            Volume = (uint)(device.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
-            IsMuted = device.AudioEndpointVolume.Mute;
+            Name = name;
+            Volume = volume;
+            IsMuted = isMuted;
             Debug.WriteLine($"AudioStore: UpdateValuesByDevice {Name} {Volume} {(IsMuted ? "(muted)" : "")}");
         });
     }
@@ -83,27 +87,42 @@ internal class AudioStore : ObservableObject, IDisposable, IMMNotificationClient
 
     public void OnDefaultDeviceChanged(DataFlow dataFlow, Role deviceRole, string pwstrDefaultDeviceId)
     {
-        try
+        Task.Run(() =>
         {
-            if (device != null)
+            try
             {
-                device.AudioEndpointVolume.OnVolumeNotification -= Device_OnVolumeNotification;
-                //device.Dispose();
-            }
+                MMDevice? oldDevice = null;
+                MMDevice? newDevice = null;
 
-            var newDevice = deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
-            Debug.WriteLine($"OnDefaultDeviceChanged {device?.FriendlyName} -> {newDevice?.FriendlyName}");
-            device = newDevice;
-            if (device != null)
-            {
-                device.AudioEndpointVolume.OnVolumeNotification += Device_OnVolumeNotification;
-                UpdateValuesByDevice();
+                lock (this)
+                {
+                    oldDevice = device;
+
+                    if (oldDevice != null)
+                    {
+                        oldDevice.AudioEndpointVolume.OnVolumeNotification -= Device_OnVolumeNotification;
+                    }
+
+                    newDevice = deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+                    Debug.WriteLine($"OnDefaultDeviceChanged {oldDevice?.FriendlyName} -> {newDevice?.FriendlyName}");
+                    device = newDevice;
+
+                    if (newDevice != null)
+                    {
+                        newDevice.AudioEndpointVolume.OnVolumeNotification += Device_OnVolumeNotification;
+                    }
+                }
+
+                if (newDevice != null)
+                {
+                    UpdateValuesByDevice();
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"OnDefaultDeviceChanged Exception: {ex}");
-        }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"OnDefaultDeviceChanged Exception: {ex}");
+            }
+        });
     }
 
     public void OnPropertyValueChanged(string pwstrDeviceId, PropertyKey key) { }
@@ -145,15 +164,28 @@ internal class AudioStore : ObservableObject, IDisposable, IMMNotificationClient
             return;
         }
 
-        try
+        Task.Run(() =>
         {
-            device.AudioEndpointVolume.Mute = mute;
-            IsMuted = mute;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"SetMute Exception: {ex}");
-        }
+            try
+            {
+                lock (this)
+                {
+                    if (device?.AudioEndpointVolume != null)
+                    {
+                        device.AudioEndpointVolume.Mute = mute;
+                        
+                        dispatcher.TryEnqueue(() =>
+                        {
+                            IsMuted = mute;
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"SetMute Exception: {ex}");
+            }
+        });
     }
 
     public void ToggleMute()
