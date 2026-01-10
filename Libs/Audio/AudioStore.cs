@@ -113,6 +113,18 @@ internal class AudioStore : ObservableObject, IDisposable, IMMNotificationClient
                     }
                 }
 
+                if (oldDevice != null)
+                {
+                    try
+                    {
+                        oldDevice.Dispose();
+                    }
+                    catch (Exception disposeEx)
+                    {
+                        Debug.WriteLine($"OnDefaultDeviceChanged - Dispose old device exception: {disposeEx}");
+                    }
+                }
+
                 if (newDevice != null)
                 {
                     UpdateValuesByDevice();
@@ -129,8 +141,25 @@ internal class AudioStore : ObservableObject, IDisposable, IMMNotificationClient
 
     public void Dispose()
     {
-        deviceEnumerator?.UnregisterEndpointNotificationCallback(this);
-        deviceEnumerator?.Dispose();
+        lock (this)
+        {
+            if (device != null)
+            {
+                try
+                {
+                    device.AudioEndpointVolume.OnVolumeNotification -= Device_OnVolumeNotification;
+                    device.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Dispose - device cleanup exception: {ex}");
+                }
+                device = null;
+            }
+
+            deviceEnumerator?.UnregisterEndpointNotificationCallback(this);
+            deviceEnumerator?.Dispose();
+        }
     }
 
     public void SetVolume(uint newVolume)
